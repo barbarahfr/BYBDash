@@ -1,0 +1,6 @@
+{
+  "name": "Client Register & Scope Matrix",
+  "description": "A comprehensive spreadsheet-style dashboard to register clients, assign responsibilities, and track department-specific task scopes.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
