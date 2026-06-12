@@ -363,14 +363,14 @@ export default function ClientFormModal({ isOpen, onClose, onSave, clientToEdit,
 
               <div className="space-y-1">
                 <label className="block text-xs font-semibold text-slate-700">
-                  Client Ranking Category
+                  Client Category
                 </label>
                 <div className="grid grid-cols-4 gap-1 mt-1">
                   {(['A', 'B', 'C', 'D'] as const).map(tier => (
                     <button
                       key={tier}
                       type="button"
-                      title={`Rank ${tier}`}
+                      title={`Tier ${tier}`}
                       onClick={() => setFormData(p => ({ ...p, ranking: tier }))}
                       className={`py-1.5 px-1 rounded-lg border text-xs font-semibold transition-all ${
                         formData.ranking === tier

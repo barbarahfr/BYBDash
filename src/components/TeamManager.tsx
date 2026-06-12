@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Team, TeamMember, Department, Client } from '../types';
 import { 
   Users, 
@@ -34,9 +34,12 @@ interface TeamManagerProps {
   onAddTeam: (team: Omit<Team, 'id'>) => void;
   onEditTeam: (team: Team) => void;
   onDeleteTeam: (id: string) => void;
-  onAddTeamMember: (member: Omit<TeamMember, 'id'>) => void;
-  onEditTeamMember: (member: TeamMember) => void;
+  onAddTeamMember: (member: Omit<TeamMember, 'id'>, coordinatedTeamId?: string) => void;
+  onEditTeamMember: (member: TeamMember, coordinatedTeamId?: string) => void;
   onDeleteTeamMember: (id: string) => void;
+  onViewCollaboratorByName?: (name: string) => void;
+  initialMemberToEdit?: TeamMember | null;
+  onClearInitialMemberToEdit?: () => void;
 }
 
 export default function TeamManager({
@@ -49,7 +52,10 @@ export default function TeamManager({
   onDeleteTeam,
   onAddTeamMember,
   onEditTeamMember,
-  onDeleteTeamMember
+  onDeleteTeamMember,
+  onViewCollaboratorByName,
+  initialMemberToEdit = null,
+  onClearInitialMemberToEdit
 }: TeamManagerProps) {
   // Tabs within Equipe page: "Membros" / "Times / Coordenadores"
   const [activeSubTab, setActiveSubTab] = useState<'members' | 'teams'>('members');
@@ -58,6 +64,16 @@ export default function TeamManager({
   // Form states - Member
   const [isMemberModalOpen, setIsMemberModalOpen] = useState(false);
   const [editingMember, setEditingMember] = useState<TeamMember | null>(null);
+  
+  const [memberCoordinatedTeamId, setMemberCoordinatedTeamId] = useState('');
+
+  // Auto-open edit modal if requested from outside
+  useEffect(() => {
+    if (initialMemberToEdit) {
+      openMemberEditModal(initialMemberToEdit);
+      onClearInitialMemberToEdit?.();
+    }
+  }, [initialMemberToEdit]);
   
   const [memberName, setMemberName] = useState('');
   const [memberEmail, setMemberEmail] = useState('');
@@ -83,6 +99,7 @@ export default function TeamManager({
     setMemberTeamId(teams[0]?.id || '');
     setMemberIsCoordinator(false);
     setMemberSupervisedDepts([]);
+    setMemberCoordinatedTeamId('');
     setIsMemberModalOpen(true);
   };
 
@@ -94,6 +111,11 @@ export default function TeamManager({
     setMemberTeamId(member.teamId);
     setMemberIsCoordinator(member.isCoordinator);
     setMemberSupervisedDepts(member.supervisedDepartmentIds || []);
+    
+    // Find if coordinator of any team
+    const coordTeam = teams.find(t => t.coordinatorId === member.id);
+    setMemberCoordinatedTeamId(coordTeam ? coordTeam.id : '');
+    
     setIsMemberModalOpen(true);
   };
 
@@ -114,9 +136,9 @@ export default function TeamManager({
       onEditTeamMember({
         ...editingMember,
         ...data
-      });
+      }, memberCoordinatedTeamId);
     } else {
-      onAddTeamMember(data);
+      onAddTeamMember(data, memberCoordinatedTeamId);
     }
     setIsMemberModalOpen(false);
   };
@@ -351,13 +373,21 @@ export default function TeamManager({
                     <div>
                       {/* Avatar & Core Metadata row */}
                       <div className="flex items-center gap-3 mb-3.5">
-                        <div className={`w-10 h-10 rounded-lg flex items-center justify-center font-bold text-sm font-display ${
-                          member.isCoordinator ? 'bg-zinc-900 text-zinc-100' : 'bg-zinc-100 text-zinc-600 border border-zinc-200'
-                        }`}>
+                        <div 
+                          onClick={() => onViewCollaboratorByName?.(member.name)}
+                          className={`w-10 h-10 rounded-lg flex items-center justify-center font-bold text-sm font-display cursor-pointer hover:opacity-80 transition-all ${
+                            member.isCoordinator ? 'bg-zinc-900 text-zinc-100' : 'bg-zinc-100 text-zinc-600 border border-zinc-200'
+                          }`}
+                          title="Ver perfil completo do colaborador"
+                        >
                           {initials}
                         </div>
                         <div className="truncate max-w-[170px]">
-                          <h4 className="font-bold text-sm text-zinc-800 tracking-tight truncate" title={member.name}>
+                          <h4 
+                            onClick={() => onViewCollaboratorByName?.(member.name)}
+                            className="font-bold text-sm text-zinc-800 tracking-tight truncate cursor-pointer hover:text-indigo-600 transition-colors"
+                            title="Ver perfil completo do colaborador"
+                          >
                             {member.name}
                           </h4>
                           <span className="inline-flex items-center gap-1 text-[10px] text-zinc-400 font-medium truncate">
@@ -497,7 +527,11 @@ export default function TeamManager({
                         <UserCheck className="text-zinc-600 shrink-0" size={16} />
                         <div className="truncate">
                           <p className="text-[9px] font-bold text-zinc-400 uppercase tracking-widest">Coordenador do Time</p>
-                          <p className="text-xs font-bold text-zinc-800 tracking-tight truncate">
+                          <p 
+                            onClick={() => coordinatorObj && onViewCollaboratorByName?.(coordinatorObj.name)}
+                            className={`text-xs font-bold tracking-tight truncate ${coordinatorObj ? 'cursor-pointer hover:text-indigo-600 transition-colors' : 'text-zinc-400'}`}
+                            title={coordinatorObj ? "Ver perfil completo do coordenador" : undefined}
+                          >
                             {coordinatorObj ? coordinatorObj.name : 'Nenhum coordenador selecionado'}
                           </p>
                           {coordinatorObj?.supervisedDepartmentIds && coordinatorObj.supervisedDepartmentIds.length > 0 && (
@@ -521,7 +555,13 @@ export default function TeamManager({
                               <div key={tm.id} className="flex items-center justify-between text-xs bg-zinc-50/50 p-2 rounded-lg border border-zinc-100">
                                 <div className="flex items-center gap-1.5 truncate">
                                   <div className="w-2 h-2 rounded-full bg-zinc-400 shrink-0" />
-                                  <span className="font-bold text-zinc-700 truncate">{tm.name}</span>
+                                  <span 
+                                    onClick={() => onViewCollaboratorByName?.(tm.name)}
+                                    className="font-bold text-zinc-700 truncate cursor-pointer hover:text-indigo-600 transition-colors bg-transparent border-0 p-0 text-left"
+                                    title="Ver perfil completo do colaborador"
+                                  >
+                                    {tm.name}
+                                  </span>
                                 </div>
                                 <span className="text-[10px] text-zinc-500 ml-2 font-medium shrink-0">{tm.role}</span>
                               </div>
@@ -653,6 +693,25 @@ export default function TeamManager({
                   </div>
                 </label>
               </div>
+
+              {/* Coordinator's Coordinated Team linkage field */}
+              {memberIsCoordinator && (
+                <div className="space-y-1 mt-3">
+                  <label className="block text-[10px] font-bold text-zinc-500 uppercase tracking-wider">Time que este Colaborador Coordena</label>
+                  <select
+                    value={memberCoordinatedTeamId}
+                    onChange={e => setMemberCoordinatedTeamId(e.target.value)}
+                    className="w-full text-xs px-3 py-2 border border-zinc-200 rounded-lg bg-white focus:ring-1 focus:ring-zinc-900 focus:border-zinc-900"
+                  >
+                    <option value="">Nenhum time especificamente</option>
+                    {teams.map(t => (
+                      <option key={t.id} value={t.id}>
+                        {t.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              )}
 
               {/* Responsible sectors list for Coordinator */}
               {memberIsCoordinator && (

@@ -13,6 +13,7 @@ import DepartmentTemplateManager from './components/DepartmentTemplateManager';
 import ClientFormModal from './components/ClientFormModal';
 import BentoClientDashboard from './components/BentoClientDashboard';
 import TeamManager from './components/TeamManager';
+import CollaboratorProfileModal from './components/CollaboratorProfileModal';
 import { 
   FolderGit, 
   Layers, 
@@ -38,6 +39,26 @@ export default function App() {
   
   // Dashboard Tab state
   const [activeTab, setActiveTab] = useState<'bento' | 'directory' | 'matrix' | 'departments' | 'team'>('bento');
+
+  // Collaborator Profile modal states
+  const [selectedCollaborator, setSelectedCollaborator] = useState<TeamMember | null>(null);
+  const [isCollaboratorModalOpen, setIsCollaboratorModalOpen] = useState(false);
+  const [collaboratorToEdit, setCollaboratorToEdit] = useState<TeamMember | null>(null);
+
+  const handleViewCollaboratorByName = (name: string) => {
+    if (!name || name === '—' || name === 'Unassigned' || name === 'Unassigned responsible') return;
+    const member = teamMembers.find(m => m.name.toLowerCase().trim() === name.toLowerCase().trim());
+    if (member) {
+      setSelectedCollaborator(member);
+      setIsCollaboratorModalOpen(true);
+    }
+  };
+
+  const handleEditCollaboratorFromModal = (member: TeamMember) => {
+    setCollaboratorToEdit(member);
+    setIsCollaboratorModalOpen(false);
+    setActiveTab('team');
+  };
 
   // Highlight spotlight client selection inside Bento Grid block
   const [selectedClientId, setSelectedClientId] = useState<string>('');
@@ -436,19 +457,34 @@ export default function App() {
 
   // 6.5 Team & Coordinator Management handlers
   const handleAddTeam = (teamData: Omit<Team, 'id'>) => {
+    const newTeamId = 'team_' + Date.now().toString() + '_' + Math.random().toString(36).substr(2, 5);
     const newTeam: Team = {
-      id: 'team_' + Date.now().toString() + '_' + Math.random().toString(36).substr(2, 5),
+      id: newTeamId,
       ...teamData
     };
-    const updated = [newTeam, ...teams];
-    setTeams(updated);
-    saveToLocalStorage(clients, departments, updated, teamMembers);
+    const updatedTeams = [newTeam, ...teams];
+    setTeams(updatedTeams);
+    
+    let updatedMembers = [...teamMembers];
+    if (teamData.coordinatorId) {
+      updatedMembers = teamMembers.map(m => m.id === teamData.coordinatorId ? { ...m, isCoordinator: true } : m);
+      setTeamMembers(updatedMembers);
+    }
+    
+    saveToLocalStorage(clients, departments, updatedTeams, updatedMembers);
   };
 
   const handleEditTeam = (updatedTeam: Team) => {
-    const updated = teams.map(t => t.id === updatedTeam.id ? updatedTeam : t);
-    setTeams(updated);
-    saveToLocalStorage(clients, departments, updated, teamMembers);
+    const updatedTeams = teams.map(t => t.id === updatedTeam.id ? updatedTeam : t);
+    setTeams(updatedTeams);
+    
+    let updatedMembers = [...teamMembers];
+    if (updatedTeam.coordinatorId) {
+      updatedMembers = teamMembers.map(m => m.id === updatedTeam.coordinatorId ? { ...m, isCoordinator: true } : m);
+      setTeamMembers(updatedMembers);
+    }
+    
+    saveToLocalStorage(clients, departments, updatedTeams, updatedMembers);
   };
 
   const handleDeleteTeam = (teamId: string) => {
@@ -460,28 +496,49 @@ export default function App() {
     saveToLocalStorage(clients, departments, updatedTeams, updatedMembers);
   };
 
-  const handleAddTeamMember = (memberData: Omit<TeamMember, 'id'>) => {
+  const handleAddTeamMember = (memberData: Omit<TeamMember, 'id'>, coordinatedTeamId?: string) => {
+    const newMemberId = 'member_' + Date.now().toString() + '_' + Math.random().toString(36).substr(2, 5);
     const newMember: TeamMember = {
-      id: 'member_' + Date.now().toString() + '_' + Math.random().toString(36).substr(2, 5),
+      id: newMemberId,
       ...memberData
     };
-    const updated = [newMember, ...teamMembers];
-    setTeamMembers(updated);
-    saveToLocalStorage(clients, departments, teams, updated);
+    const updatedMembers = [newMember, ...teamMembers];
+    setTeamMembers(updatedMembers);
+
+    let updatedTeams = [...teams];
+    if (coordinatedTeamId) {
+      updatedTeams = teams.map(t => t.id === coordinatedTeamId ? { ...t, coordinatorId: newMemberId } : t);
+      setTeams(updatedTeams);
+    }
+
+    saveToLocalStorage(clients, departments, updatedTeams, updatedMembers);
   };
 
-  const handleEditTeamMember = (updatedMember: TeamMember) => {
-    const updated = teamMembers.map(m => m.id === updatedMember.id ? updatedMember : m);
-    setTeamMembers(updated);
+  const handleEditTeamMember = (updatedMember: TeamMember, coordinatedTeamId?: string) => {
+    const updatedMembers = teamMembers.map(m => m.id === updatedMember.id ? updatedMember : m);
+    setTeamMembers(updatedMembers);
     
-    // If coordinator status is revoked, clear coordinatorId from any teams they managed
     let updatedTeams = [...teams];
+    // If coordinator status is revoked, clear coordinatorId from any teams they managed
     if (!updatedMember.isCoordinator) {
       updatedTeams = teams.map(t => t.coordinatorId === updatedMember.id ? { ...t, coordinatorId: '' } : t);
       setTeams(updatedTeams);
+    } else if (coordinatedTeamId !== undefined) {
+      updatedTeams = teams.map(t => {
+        // If this team was previously managed by this member but is no longer
+        if (t.coordinatorId === updatedMember.id && t.id !== coordinatedTeamId) {
+          return { ...t, coordinatorId: '' };
+        }
+        // If this is the new team managed by this member
+        if (t.id === coordinatedTeamId) {
+          return { ...t, coordinatorId: updatedMember.id };
+        }
+        return t;
+      });
+      setTeams(updatedTeams);
     }
     
-    saveToLocalStorage(clients, departments, updatedTeams, updated);
+    saveToLocalStorage(clients, departments, updatedTeams, updatedMembers);
   };
 
   const handleDeleteTeamMember = (memberId: string) => {
@@ -755,6 +812,7 @@ export default function App() {
               onConfigureScopeClick={() => setActiveTab('matrix')}
               onDeleteClientClick={handleDeleteClient}
               onUpdateSatisfaction={handleUpdateSatisfaction}
+              onViewCollaboratorByName={handleViewCollaboratorByName}
             />
           )}
 
@@ -768,6 +826,7 @@ export default function App() {
               onAddCustomColumn={handleAddCustomColumn}
               onEditCustomColumn={handleEditCustomColumn}
               onDeleteCustomColumn={handleDeleteCustomColumn}
+              onViewCollaboratorByName={handleViewCollaboratorByName}
             />
           )}
 
@@ -802,6 +861,9 @@ export default function App() {
               onAddTeamMember={handleAddTeamMember}
               onEditTeamMember={handleEditTeamMember}
               onDeleteTeamMember={handleDeleteTeamMember}
+              onViewCollaboratorByName={handleViewCollaboratorByName}
+              initialMemberToEdit={collaboratorToEdit}
+              onClearInitialMemberToEdit={() => setCollaboratorToEdit(null)}
             />
           )}
         </div>
@@ -816,6 +878,16 @@ export default function App() {
         clientToEdit={editingClient}
         teamMembers={teamMembers}
         customColumns={customColumns}
+      />
+
+      {/* Collaborator Profile Modal */}
+      <CollaboratorProfileModal
+        isOpen={isCollaboratorModalOpen}
+        onClose={() => setIsCollaboratorModalOpen(false)}
+        member={selectedCollaborator}
+        teams={teams}
+        clients={clients}
+        onEditMemberClick={handleEditCollaboratorFromModal}
       />
 
       {/* Humble Footer */}

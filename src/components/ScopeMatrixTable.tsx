@@ -144,7 +144,7 @@ export default function ScopeMatrixTable({
             onChange={e => setRankingFilter(e.target.value)}
             className="text-xs px-2.5 py-1.5 border border-slate-200 rounded-lg bg-white"
           >
-            <option value="All">All Tiers (Ranking A, B, C, D)</option>
+            <option value="All">All Tiers (A, B, C, D)</option>
             <option value="A">Tier A only</option>
             <option value="B">Tier B only</option>
             <option value="C">Tier C only</option>
@@ -269,7 +269,7 @@ export default function ScopeMatrixTable({
                         <div className="truncate">
                           <div className="font-bold text-slate-800">{client.name}</div>
                           <div className="text-[10px] text-slate-400 flex items-center gap-1.5 mt-0.5 font-medium">
-                            <span className="font-extrabold uppercase shrink-0">Rank {client.ranking}</span>
+                            <span className="font-extrabold uppercase shrink-0">{client.ranking}</span>
                             <span className="truncate max-w-[120px]">{client.segment}</span>
                           </div>
                         </div>

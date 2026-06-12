@@ -33,6 +33,7 @@ interface BentoClientDashboardProps {
   onConfigureScopeClick: () => void;
   onDeleteClientClick: (id: string) => void;
   onUpdateSatisfaction?: (id: string, rating: number) => void;
+  onViewCollaboratorByName?: (name: string) => void;
 }
 
 export default function BentoClientDashboard({
@@ -43,7 +44,8 @@ export default function BentoClientDashboard({
   onEditClientClick,
   onConfigureScopeClick,
   onDeleteClientClick,
-  onUpdateSatisfaction
+  onUpdateSatisfaction,
+  onViewCollaboratorByName
 }: BentoClientDashboardProps) {
   
   // Find currently selected client
@@ -160,7 +162,7 @@ export default function BentoClientDashboard({
                 {getInitials(currentClient.name)}
               </div>
               <span className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest border ${getRankBadgeClass(currentClient.ranking)}`}>
-                Rank {currentClient.ranking}
+                {currentClient.ranking}
               </span>
             </div>
 
@@ -264,37 +266,97 @@ export default function BentoClientDashboard({
             </h3>
             
             <div className="grid grid-cols-2 lg:grid-cols-3 gap-2.5">
-              <div className="p-3 bg-zinc-50 rounded-xl border border-zinc-100">
+              <div 
+                onClick={() => currentClient.responsibles.serviceLiaison && currentClient.responsibles.serviceLiaison !== '—' && currentClient.responsibles.serviceLiaison !== 'Unassigned' && onViewCollaboratorByName?.(currentClient.responsibles.serviceLiaison)}
+                className={`p-3 bg-zinc-50 rounded-xl border border-zinc-100 transition-all ${
+                  currentClient.responsibles.serviceLiaison && currentClient.responsibles.serviceLiaison !== '—' && currentClient.responsibles.serviceLiaison !== 'Unassigned'
+                    ? 'cursor-pointer hover:bg-zinc-100 hover:border-zinc-300'
+                    : ''
+                }`}
+                title={currentClient.responsibles.serviceLiaison && currentClient.responsibles.serviceLiaison !== 'Unassigned' ? "Ver perfil detalhado do Account Manager" : undefined}
+              >
                 <p className="text-[9px] text-zinc-400 font-bold uppercase tracking-wider">Account Manager</p>
-                <p className="text-xs font-bold mt-1 text-zinc-800 truncate" title={currentClient.responsibles.serviceLiaison}>
+                <p className={`text-xs font-bold mt-1 truncate ${
+                  currentClient.responsibles.serviceLiaison && currentClient.responsibles.serviceLiaison !== '—' && currentClient.responsibles.serviceLiaison !== 'Unassigned'
+                    ? 'text-indigo-600 hover:underline'
+                    : 'text-zinc-400'
+                }`}>
                   {currentClient.responsibles.serviceLiaison || '—'}
                 </p>
               </div>
 
-              <div className="p-3 bg-zinc-50 rounded-xl border border-zinc-100">
+              <div 
+                onClick={() => currentClient.responsibles.writer && currentClient.responsibles.writer !== '—' && currentClient.responsibles.writer !== 'Unassigned' && onViewCollaboratorByName?.(currentClient.responsibles.writer)}
+                className={`p-3 bg-zinc-50 rounded-xl border border-zinc-100 transition-all ${
+                  currentClient.responsibles.writer && currentClient.responsibles.writer !== '—' && currentClient.responsibles.writer !== 'Unassigned'
+                    ? 'cursor-pointer hover:bg-zinc-100 hover:border-zinc-300'
+                    : ''
+                }`}
+                title={currentClient.responsibles.writer && currentClient.responsibles.writer !== '—' ? "Ver perfil detalhado do Copywriter" : undefined}
+              >
                 <p className="text-[9px] text-zinc-400 font-bold uppercase tracking-wider">Department Copy</p>
-                <p className="text-xs font-bold mt-1 text-zinc-800 truncate" title={currentClient.responsibles.writer}>
+                <p className={`text-xs font-bold mt-1 truncate ${
+                  currentClient.responsibles.writer && currentClient.responsibles.writer !== '—' && currentClient.responsibles.writer !== 'Unassigned'
+                    ? 'text-indigo-600 hover:underline'
+                    : 'text-zinc-400'
+                }`}>
                   {currentClient.responsibles.writer || '—'}
                 </p>
               </div>
 
-              <div className="p-3 bg-zinc-50 rounded-xl border border-zinc-100">
+              <div 
+                onClick={() => currentClient.responsibles.designer && currentClient.responsibles.designer !== '—' && currentClient.responsibles.designer !== 'Unassigned' && onViewCollaboratorByName?.(currentClient.responsibles.designer)}
+                className={`p-3 bg-zinc-50 rounded-xl border border-zinc-100 transition-all ${
+                  currentClient.responsibles.designer && currentClient.responsibles.designer !== '—' && currentClient.responsibles.designer !== 'Unassigned'
+                    ? 'cursor-pointer hover:bg-zinc-100 hover:border-zinc-300'
+                    : ''
+                }`}
+                title={currentClient.responsibles.designer && currentClient.responsibles.designer !== '—' ? "Ver perfil detalhado do Designer" : undefined}
+              >
                 <p className="text-[9px] text-zinc-400 font-bold uppercase tracking-wider">Creative Designer</p>
-                <p className="text-xs font-bold mt-1 text-zinc-800 truncate" title={currentClient.responsibles.designer}>
+                <p className={`text-xs font-bold mt-1 truncate ${
+                  currentClient.responsibles.designer && currentClient.responsibles.designer !== '—' && currentClient.responsibles.designer !== 'Unassigned'
+                    ? 'text-indigo-600 hover:underline'
+                    : 'text-zinc-400'
+                }`}>
                   {currentClient.responsibles.designer || '—'}
                 </p>
               </div>
 
-              <div className="p-3 bg-zinc-50 rounded-xl border border-zinc-100">
+              <div 
+                onClick={() => currentClient.responsibles.paidTrafficHandler && currentClient.responsibles.paidTrafficHandler !== '—' && currentClient.responsibles.paidTrafficHandler !== 'Unassigned' && onViewCollaboratorByName?.(currentClient.responsibles.paidTrafficHandler)}
+                className={`p-3 bg-zinc-50 rounded-xl border border-zinc-100 transition-all ${
+                  currentClient.responsibles.paidTrafficHandler && currentClient.responsibles.paidTrafficHandler !== '—' && currentClient.responsibles.paidTrafficHandler !== 'Unassigned'
+                    ? 'cursor-pointer hover:bg-zinc-100 hover:border-zinc-300'
+                    : ''
+                }`}
+                title={currentClient.responsibles.paidTrafficHandler && currentClient.responsibles.paidTrafficHandler !== '—' ? "Ver perfil detalhado do Gestor de Tráfego" : undefined}
+              >
                 <p className="text-[9px] text-zinc-400 font-bold uppercase tracking-wider">Paid Traffic Specialist</p>
-                <p className="text-xs font-bold mt-1 text-zinc-800 truncate" title={currentClient.responsibles.paidTrafficHandler}>
+                <p className={`text-xs font-bold mt-1 truncate ${
+                  currentClient.responsibles.paidTrafficHandler && currentClient.responsibles.paidTrafficHandler !== '—' && currentClient.responsibles.paidTrafficHandler !== 'Unassigned'
+                    ? 'text-indigo-600 hover:underline'
+                    : 'text-zinc-400'
+                }`}>
                   {currentClient.responsibles.paidTrafficHandler || '—'}
                 </p>
               </div>
 
-              <div className="p-3 bg-zinc-50 rounded-xl border border-zinc-100 col-span-2 lg:col-span-1">
+              <div 
+                onClick={() => currentClient.responsibles.socialMedia && currentClient.responsibles.socialMedia !== '—' && currentClient.responsibles.socialMedia !== 'Unassigned' && onViewCollaboratorByName?.(currentClient.responsibles.socialMedia)}
+                className={`p-3 bg-zinc-50 rounded-xl border border-zinc-100 col-span-2 lg:col-span-1 transition-all ${
+                  currentClient.responsibles.socialMedia && currentClient.responsibles.socialMedia !== '—' && currentClient.responsibles.socialMedia !== 'Unassigned'
+                    ? 'cursor-pointer hover:bg-zinc-100 hover:border-zinc-300'
+                    : ''
+                }`}
+                title={currentClient.responsibles.socialMedia && currentClient.responsibles.socialMedia !== '—' ? "Ver perfil detalhado do Social Media" : undefined}
+              >
                 <p className="text-[9px] text-zinc-400 font-bold uppercase tracking-wider">Social Media Specialist</p>
-                <p className="text-xs font-bold mt-1 text-zinc-800 truncate" title={currentClient.responsibles.socialMedia}>
+                <p className={`text-xs font-bold mt-1 truncate ${
+                  currentClient.responsibles.socialMedia && currentClient.responsibles.socialMedia !== '—' && currentClient.responsibles.socialMedia !== 'Unassigned'
+                    ? 'text-indigo-600 hover:underline'
+                    : 'text-zinc-400'
+                }`}>
                   {currentClient.responsibles.socialMedia || '—'}
                 </p>
               </div>

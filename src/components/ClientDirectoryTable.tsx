@@ -33,6 +33,7 @@ interface ClientDirectoryTableProps {
   onAddCustomColumn: (newCol: Omit<CustomColumn, 'id'>) => void;
   onEditCustomColumn: (updatedCol: CustomColumn) => void;
   onDeleteCustomColumn: (colId: string) => void;
+  onViewCollaboratorByName?: (name: string) => void;
 }
 
 export default function ClientDirectoryTable({ 
@@ -43,7 +44,8 @@ export default function ClientDirectoryTable({
   customColumns = [],
   onAddCustomColumn,
   onEditCustomColumn,
-  onDeleteCustomColumn
+  onDeleteCustomColumn,
+  onViewCollaboratorByName
 }: ClientDirectoryTableProps) {
   // Filter States
   const [search, setSearch] = useState('');
@@ -562,7 +564,7 @@ export default function ClientDirectoryTable({
                         <div className="font-semibold text-slate-800 text-sm">{client.name}</div>
                         <div className="flex items-center gap-1.5 mt-1">
                           <span className={`px-1.5 py-0.5 rounded text-[10px] font-extrabold border uppercase tracking-wider ${rankColor}`} title="Agency Tier Ranking">
-                            Rank {client.ranking}
+                            {client.ranking}
                           </span>
                           <span className="text-[10px] text-slate-400 truncate max-w-[150px]" title={client.contactEmail}>
                             {client.contactEmail || 'No contact email'}
@@ -625,7 +627,11 @@ export default function ClientDirectoryTable({
                           <div className="w-5 h-5 rounded-full bg-indigo-50 flex items-center justify-center text-[10px] font-bold text-indigo-600 shrink-0 uppercase">
                             {(client.responsibles.serviceLiaison || 'U')[0]}
                           </div>
-                          <span className="font-medium text-slate-700 truncate max-w-[120px]" title={client.responsibles.serviceLiaison}>
+                          <span 
+                            onClick={() => client.responsibles.serviceLiaison && client.responsibles.serviceLiaison !== 'Unassigned' && onViewCollaboratorByName?.(client.responsibles.serviceLiaison)}
+                            className={`font-medium truncate max-w-[124px] ${client.responsibles.serviceLiaison && client.responsibles.serviceLiaison !== 'Unassigned' ? 'cursor-pointer hover:text-indigo-600 hover:underline transition-all text-slate-700' : 'text-slate-400'}`} 
+                            title={client.responsibles.serviceLiaison ? "Ver perfil do colaborador" : undefined}
+                          >
                             {client.responsibles.serviceLiaison || 'Unassigned'}
                           </span>
                         </div>
@@ -648,25 +654,49 @@ export default function ClientDirectoryTable({
                               {hasContentSeo && (
                                 <div className="flex items-center gap-1">
                                   <span className="w-11 text-right text-[10px] font-semibold text-slate-400">Writer:</span>
-                                  <span className="text-slate-700 font-medium truncate max-w-[124px]">{client.responsibles?.writer || '—'}</span>
+                                  <span 
+                                    onClick={() => client.responsibles?.writer && client.responsibles.writer !== '—' && onViewCollaboratorByName?.(client.responsibles.writer)}
+                                    className={`font-medium truncate max-w-[124px] ${client.responsibles?.writer && client.responsibles.writer !== '—' && client.responsibles.writer !== 'Unassigned' ? 'cursor-pointer hover:text-indigo-600 hover:underline transition-all text-slate-700 font-bold' : 'text-slate-400'}`}
+                                    title={client.responsibles?.writer ? "Ver perfil do colaborador" : undefined}
+                                  >
+                                    {client.responsibles?.writer || '—'}
+                                  </span>
                                 </div>
                               )}
                               {hasDesign && (
                                 <div className="flex items-center gap-1">
                                   <span className="w-11 text-right text-[10px] font-semibold text-slate-400">Design:</span>
-                                  <span className="text-slate-700 font-medium truncate max-w-[124px]">{client.responsibles?.designer || '—'}</span>
+                                  <span 
+                                    onClick={() => client.responsibles?.designer && client.responsibles.designer !== '—' && onViewCollaboratorByName?.(client.responsibles.designer)}
+                                    className={`font-medium truncate max-w-[124px] ${client.responsibles?.designer && client.responsibles.designer !== '—' && client.responsibles.designer !== 'Unassigned' ? 'cursor-pointer hover:text-indigo-600 hover:underline transition-all text-slate-700 font-bold' : 'text-slate-400'}`}
+                                    title={client.responsibles?.designer ? "Ver perfil do colaborador" : undefined}
+                                  >
+                                    {client.responsibles?.designer || '—'}
+                                  </span>
                                 </div>
                               )}
                               {hasPaidMedia && (
                                 <div className="flex items-center gap-1">
                                   <span className="w-11 text-right text-[10px] font-semibold text-slate-400">Traffic:</span>
-                                  <span className="text-slate-700 font-medium truncate max-w-[124px]">{client.responsibles?.paidTrafficHandler || '—'}</span>
+                                  <span 
+                                    onClick={() => client.responsibles?.paidTrafficHandler && client.responsibles.paidTrafficHandler !== '—' && onViewCollaboratorByName?.(client.responsibles.paidTrafficHandler)}
+                                    className={`font-medium truncate max-w-[124px] ${client.responsibles?.paidTrafficHandler && client.responsibles.paidTrafficHandler !== '—' && client.responsibles.paidTrafficHandler !== 'Unassigned' ? 'cursor-pointer hover:text-indigo-600 hover:underline transition-all text-slate-700 font-bold' : 'text-slate-400'}`}
+                                    title={client.responsibles?.paidTrafficHandler ? "Ver perfil do colaborador" : undefined}
+                                  >
+                                    {client.responsibles?.paidTrafficHandler || '—'}
+                                  </span>
                                 </div>
                               )}
                               {hasSocialMedia && (
                                 <div className="flex items-center gap-1">
                                   <span className="w-11 text-right text-[10px] font-semibold text-slate-400">Social:</span>
-                                  <span className="text-slate-700 font-medium truncate max-w-[124px]">{client.responsibles?.socialMedia || '—'}</span>
+                                  <span 
+                                    onClick={() => client.responsibles?.socialMedia && client.responsibles.socialMedia !== '—' && onViewCollaboratorByName?.(client.responsibles.socialMedia)}
+                                    className={`font-medium truncate max-w-[124px] ${client.responsibles?.socialMedia && client.responsibles.socialMedia !== '—' && client.responsibles.socialMedia !== 'Unassigned' ? 'cursor-pointer hover:text-indigo-600 hover:underline transition-all text-slate-700 font-bold' : 'text-slate-400'}`}
+                                    title={client.responsibles?.socialMedia ? "Ver perfil do colaborador" : undefined}
+                                  >
+                                    {client.responsibles?.socialMedia || '—'}
+                                  </span>
                                 </div>
                               )}
                             </>
