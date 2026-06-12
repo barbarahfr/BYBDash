@@ -5,7 +5,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { Client, Department, Task, Team, TeamMember, CustomColumn } from './types';
-import { INITIAL_DEPARTMENTS, INITIAL_CLIENTS, INITIAL_TEAMS, INITIAL_TEAM_MEMBERS } from './initialData';
+import { INITIAL_DEPARTMENTS, INITIAL_CLIENTS, INITIAL_TEAMS, INITIAL_TEAM_MEMBERS, INITIAL_CUSTOM_COLUMNS } from './initialData';
 import DashboardStats from './components/DashboardStats';
 import ClientDirectoryTable from './components/ClientDirectoryTable';
 import ScopeMatrixTable from './components/ScopeMatrixTable';
@@ -61,27 +61,31 @@ export default function App() {
       if (cachedCustomCols) {
         setCustomColumns(JSON.parse(cachedCustomCols));
       } else {
-        setCustomColumns([]);
+        setCustomColumns(INITIAL_CUSTOM_COLUMNS);
       }
 
       if (cachedClients && cachedDepts) {
         let parsedClients = JSON.parse(cachedClients);
         let parsedDepts = JSON.parse(cachedDepts);
         
-        // Auto-upgrade legacy departments structure to match the brand new team/sector division
+        // Auto-upgrade legacy structures or force upgrade if old clients list is detected
         const hasLegacy = parsedDepts.some((d: any) => d.id === 'inbound' || d.id === 'copywrite');
-        if (hasLegacy) {
+        const hasOldPresetOnly = parsedClients.length <= 4 && parsedClients.some((c: any) => c.id === 'c1' || c.name === 'Aura Premium Cosmetics');
+        
+        if (hasLegacy || hasOldPresetOnly) {
           parsedClients = INITIAL_CLIENTS;
           parsedDepts = INITIAL_DEPARTMENTS;
           localStorage.setItem('byb_agency_clients', JSON.stringify(INITIAL_CLIENTS));
           localStorage.setItem('byb_agency_departments', JSON.stringify(INITIAL_DEPARTMENTS));
           localStorage.setItem('byb_agency_teams', JSON.stringify(INITIAL_TEAMS));
           localStorage.setItem('byb_agency_team_members', JSON.stringify(INITIAL_TEAM_MEMBERS));
+          localStorage.setItem('byb_agency_custom_columns', JSON.stringify(INITIAL_CUSTOM_COLUMNS));
           
           setClients(INITIAL_CLIENTS);
           setDepartments(INITIAL_DEPARTMENTS);
           setTeams(INITIAL_TEAMS);
           setTeamMembers(INITIAL_TEAM_MEMBERS);
+          setCustomColumns(INITIAL_CUSTOM_COLUMNS);
         } else {
           setClients(parsedClients);
           setDepartments(parsedDepts);
@@ -102,6 +106,7 @@ export default function App() {
         setDepartments(INITIAL_DEPARTMENTS);
         setTeams(INITIAL_TEAMS);
         setTeamMembers(INITIAL_TEAM_MEMBERS);
+        setCustomColumns(INITIAL_CUSTOM_COLUMNS);
 
         if (INITIAL_CLIENTS.length > 0) {
           setSelectedClientId(INITIAL_CLIENTS[0].id);
@@ -110,6 +115,7 @@ export default function App() {
         localStorage.setItem('byb_agency_departments', JSON.stringify(INITIAL_DEPARTMENTS));
         localStorage.setItem('byb_agency_teams', JSON.stringify(INITIAL_TEAMS));
         localStorage.setItem('byb_agency_team_members', JSON.stringify(INITIAL_TEAM_MEMBERS));
+        localStorage.setItem('byb_agency_custom_columns', JSON.stringify(INITIAL_CUSTOM_COLUMNS));
       }
     } catch (e) {
       console.error('Failed to parse cached database. Falling back to defaults.', e);
@@ -117,7 +123,7 @@ export default function App() {
       setDepartments(INITIAL_DEPARTMENTS);
       setTeams(INITIAL_TEAMS);
       setTeamMembers(INITIAL_TEAM_MEMBERS);
-      setCustomColumns([]);
+      setCustomColumns(INITIAL_CUSTOM_COLUMNS);
       if (INITIAL_CLIENTS.length > 0) {
         setSelectedClientId(INITIAL_CLIENTS[0].id);
       }
