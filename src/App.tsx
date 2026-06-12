@@ -90,11 +90,36 @@ export default function App() {
           setClients(parsedClients);
           setDepartments(parsedDepts);
           
-          if (cachedTeams) setTeams(JSON.parse(cachedTeams));
-          else setTeams(INITIAL_TEAMS);
-
-          if (cachedMembers) setTeamMembers(JSON.parse(cachedMembers));
-          else setTeamMembers(INITIAL_TEAM_MEMBERS);
+          let teamsList = INITIAL_TEAMS;
+          let membersList = INITIAL_TEAM_MEMBERS;
+          let upgradedTeams = false;
+          
+          if (cachedTeams) {
+            try {
+              const parsedTeamsList = JSON.parse(cachedTeams);
+              const hasLegacyTeams = parsedTeamsList.some((t: any) => t.id === 'team_atendimento' || t.id === 'team_operacoes' || t.name === 'Atendimento & CS');
+              if (hasLegacyTeams) {
+                teamsList = INITIAL_TEAMS;
+                membersList = INITIAL_TEAM_MEMBERS;
+                upgradedTeams = true;
+              } else {
+                teamsList = parsedTeamsList;
+                if (cachedMembers) {
+                  membersList = JSON.parse(cachedMembers);
+                }
+              }
+            } catch (e) {
+              console.error('Error parsing teams', e);
+            }
+          }
+          
+          setTeams(teamsList);
+          setTeamMembers(membersList);
+          
+          if (upgradedTeams) {
+            localStorage.setItem('byb_agency_teams', JSON.stringify(INITIAL_TEAMS));
+            localStorage.setItem('byb_agency_team_members', JSON.stringify(INITIAL_TEAM_MEMBERS));
+          }
         }
 
         if (parsedClients.length > 0) {

@@ -60,18 +60,28 @@ export const INITIAL_CUSTOM_COLUMNS: CustomColumn[] = [
 
 export const INITIAL_TEAMS: Team[] = [
   {
-    id: 'team_atendimento',
-    name: 'Atendimento & CS',
+    id: 'team_content_seo',
+    name: 'Otimização e SEO',
+    coordinatorId: 'member_barbarah'
+  },
+  {
+    id: 'team_automations_crm',
+    name: 'Automações e CRM',
+    coordinatorId: 'member_barbarah'
+  },
+  {
+    id: 'team_social_media',
+    name: 'Mídias Sociais',
     coordinatorId: 'member_barbarah'
   },
   {
     id: 'team_design',
-    name: 'Design & Web',
+    name: 'Design',
     coordinatorId: 'member_emma'
   },
   {
-    id: 'team_operacoes',
-    name: 'Operações Gerais',
+    id: 'team_paid_media',
+    name: 'Mídias Pagas',
     coordinatorId: 'member_barbarah'
   }
 ];
@@ -82,7 +92,7 @@ export const INITIAL_TEAM_MEMBERS: TeamMember[] = [
     name: 'Glauber Moraes',
     email: 'glauber@byb.ag',
     role: 'Gestor de Contas / Tráfego',
-    teamId: 'team_atendimento',
+    teamId: 'team_paid_media',
     isCoordinator: false
   },
   {
@@ -90,7 +100,7 @@ export const INITIAL_TEAM_MEMBERS: TeamMember[] = [
     name: 'Maurício',
     email: 'mauricio@byb.ag',
     role: 'Estrategista Digital / Tráfego',
-    teamId: 'team_atendimento',
+    teamId: 'team_paid_media',
     isCoordinator: false
   },
   {
@@ -98,7 +108,7 @@ export const INITIAL_TEAM_MEMBERS: TeamMember[] = [
     name: 'Ed',
     email: 'ed@byb.ag',
     role: 'Sócio / Atendimento',
-    teamId: 'team_atendimento',
+    teamId: 'team_automations_crm',
     isCoordinator: false
   },
   {
@@ -106,7 +116,7 @@ export const INITIAL_TEAM_MEMBERS: TeamMember[] = [
     name: 'Clara',
     email: 'clara@byb.ag',
     role: 'Gestora de Redes Sociais / CS',
-    teamId: 'team_atendimento',
+    teamId: 'team_social_media',
     isCoordinator: false
   },
   {
@@ -114,7 +124,7 @@ export const INITIAL_TEAM_MEMBERS: TeamMember[] = [
     name: 'Barbarah',
     email: 'barbarah@byb.ag',
     role: 'Diretora de Operações',
-    teamId: 'team_atendimento',
+    teamId: 'team_automations_crm',
     isCoordinator: true,
     supervisedDepartmentIds: ['design', 'paid_media', 'content_seo', 'social_media', 'automations_crm']
   },
@@ -123,7 +133,7 @@ export const INITIAL_TEAM_MEMBERS: TeamMember[] = [
     name: 'Lucas Benitez',
     email: 'lucas@byb.ag',
     role: 'Copywriter Sênior',
-    teamId: 'team_operacoes',
+    teamId: 'team_content_seo',
     isCoordinator: false
   },
   {

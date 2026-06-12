@@ -510,7 +510,7 @@ export default function ClientFormModal({ isOpen, onClose, onSave, clientToEdit,
                 'Atendimento',
                 'serviceLiaison',
                 'Selecione o profissional de Atendimento',
-                ['team_atendimento'],
+                ['team_paid_media', 'team_automations_crm'],
                 false
               )}
 
