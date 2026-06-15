@@ -24,6 +24,31 @@ import {
   Trash2
 } from 'lucide-react';
 
+const GoogleDriveIcon = ({ active }: { active: boolean }) => (
+  <svg viewBox="0 0 512 512" className="w-6 h-6 shrink-0" fill="none">
+    <path d="M339 345l87-150-136-235H123L36 110l136 235z" fill={active ? "#FFC107" : "#cbd5e1"}/>
+    <path d="M172 345L85 495h271l87-150H172z" fill={active ? "#2196F3" : "#94a3b8"}/>
+    <path d="M36 110l136 235 86-150L122 45 36 110z" fill={active ? "#4CAF50" : "#64748b"}/>
+  </svg>
+);
+
+const GoogleSlidesIcon = ({ active }: { active: boolean }) => (
+  <svg viewBox="0 0 24 24" className="w-6 h-6 shrink-0" fill="none">
+    <rect x="3" y="3" width="18" height="18" rx="2" fill={active ? "#FFC107" : "#94a3b8"} />
+    <path d="M6 7h12v7H6V7z" fill="#FFF" />
+    <line x1="8" y1="17" x2="16" y2="17" stroke="#FFF" strokeWidth="1.5" strokeLinecap="round" />
+    <line x1="12" y1="14" x2="12" y2="17" stroke="#FFF" strokeWidth="1.5" />
+    <circle cx="12" cy="10" r="1.5" fill={active ? "#FFC107" : "#94a3b8"} />
+  </svg>
+);
+
+const OperandIcon = ({ active }: { active: boolean }) => (
+  <svg viewBox="0 0 24 24" className="w-6 h-6 shrink-0" fill="none" strokeWidth="3" strokeLinecap="round">
+    <circle cx="12" cy="12" r="8.5" stroke={active ? "#00A3FF" : "#94a3b8"} strokeWidth="3" className="opacity-80" />
+    <path d="M12 3.5 A 8.5 8.5 0 0 1 20.5 12" stroke={active ? "#0057FF" : "#64748b"} strokeWidth="3" />
+  </svg>
+);
+
 interface BentoClientDashboardProps {
   clients: Client[];
   departments: Department[];
@@ -492,7 +517,7 @@ export default function BentoClientDashboard({
         </div>
 
         {/* 5. Repositórios e Planejamentos (col-span-3) */}
-        <div className="md:col-span-3 flex flex-col justify-between gap-4">
+        <div className="md:col-span-3 flex flex-col justify-between gap-3">
           
           {currentClient.driveFolderLink ? (
             <a 
@@ -500,23 +525,23 @@ export default function BentoClientDashboard({
               target="_blank" 
               referrerPolicy="no-referrer"
               rel="noopener noreferrer"
-              className="flex-1 bg-white border border-zinc-200 rounded-2xl p-6 flex flex-col justify-center items-center gap-3 hover:bg-zinc-50 transition-all shadow-xs group cursor-pointer text-center"
+              className="flex-1 bg-white border border-emerald-200 hover:border-emerald-300 rounded-2xl p-4 flex flex-col justify-center items-center gap-2 hover:bg-emerald-50/20 transition-all shadow-xs group cursor-pointer text-center"
             >
-              <div className="w-12 h-12 bg-emerald-100 text-emerald-600 rounded-xl flex items-center justify-center font-bold text-lg group-hover:scale-105 transition-transform font-display shadow-2xs">
-                D
+              <div className="w-10 h-10 bg-emerald-50 rounded-xl flex items-center justify-center group-hover:scale-105 transition-transform shadow-3xs">
+                <GoogleDriveIcon active={true} />
               </div>
               <div className="text-center">
-                <p className="text-xs font-bold text-zinc-800">Pasta Google Drive</p>
-                <p className="text-[9px] text-zinc-400 uppercase tracking-widest font-mono mt-0.5">Repositório de Arquivos <ExternalLink size={8} className="inline ml-0.5" /></p>
+                <p className="text-xs font-bold text-zinc-850">Pasta Google Drive</p>
+                <p className="text-[9px] text-zinc-450 uppercase tracking-widest font-mono mt-0.5 flex items-center justify-center gap-1">Arquivos & Criativos <ExternalLink size={8} /></p>
               </div>
             </a>
           ) : (
-            <div className="flex-1 bg-white/70 border border-dashed border-zinc-250 rounded-2xl p-6 flex flex-col justify-center items-center gap-1.5 text-center cursor-not-allowed text-zinc-400">
-              <div className="w-10 h-10 bg-zinc-100 text-zinc-300 rounded-xl flex items-center justify-center font-bold font-display">
-                D
+            <div className="flex-1 bg-zinc-50/50 border border-dashed border-zinc-200 rounded-2xl p-4 flex flex-col justify-center items-center gap-1 text-center cursor-not-allowed text-zinc-400">
+              <div className="w-8 h-8 bg-zinc-100 rounded-xl flex items-center justify-center opacity-60">
+                <GoogleDriveIcon active={false} />
               </div>
-              <p className="text-xs font-bold">Sem Link de Drive</p>
-              <p className="text-[9px] uppercase font-mono">Nenhuma URL de arquivos definida</p>
+              <p className="text-[11px] font-bold text-zinc-500">Sem Google Drive</p>
+              <p className="text-[8px] uppercase tracking-wider font-mono">Nenhum repositório de arquivos</p>
             </div>
           )}
 
@@ -526,23 +551,49 @@ export default function BentoClientDashboard({
               target="_blank" 
               referrerPolicy="no-referrer"
               rel="noopener noreferrer"
-              className="flex-1 bg-white border border-zinc-200 rounded-2xl p-6 flex flex-col justify-center items-center gap-3 hover:bg-zinc-50 transition-all shadow-xs group cursor-pointer text-center"
+              className="flex-1 bg-white border border-amber-200 hover:border-amber-300 rounded-2xl p-4 flex flex-col justify-center items-center gap-2 hover:bg-amber-50/20 transition-all shadow-xs group cursor-pointer text-center"
             >
-              <div className="w-12 h-12 bg-amber-100 text-amber-600 rounded-xl flex items-center justify-center font-bold text-lg group-hover:scale-105 transition-transform font-display shadow-2xs">
-                P
+              <div className="w-10 h-10 bg-amber-50 rounded-xl flex items-center justify-center group-hover:scale-105 transition-transform shadow-3xs">
+                <GoogleSlidesIcon active={true} />
               </div>
               <div className="text-center">
-                <p className="text-xs font-bold text-zinc-800">Estratégia e Cronograma</p>
-                <p className="text-[9px] text-zinc-400 uppercase tracking-widest font-mono mt-0.5">Planilha de Planejamento <ExternalLink size={8} className="inline ml-0.5" /></p>
+                <p className="text-xs font-bold text-zinc-850">Planejamento Estratégico</p>
+                <p className="text-[9px] text-zinc-455 uppercase tracking-widest font-mono mt-0.5 flex items-center justify-center gap-1">Apresentação Geral <ExternalLink size={8} /></p>
               </div>
             </a>
           ) : (
-            <div className="flex-1 bg-white/70 border border-dashed border-zinc-250 rounded-2xl p-6 flex flex-col justify-center items-center gap-1.5 text-center cursor-not-allowed text-zinc-400">
-              <div className="w-10 h-10 bg-zinc-100 text-zinc-300 rounded-xl flex items-center justify-center font-bold font-display">
-                P
+            <div className="flex-1 bg-zinc-50/50 border border-dashed border-zinc-200 rounded-2xl p-4 flex flex-col justify-center items-center gap-1 text-center cursor-not-allowed text-zinc-400">
+              <div className="w-8 h-8 bg-zinc-100 rounded-xl flex items-center justify-center opacity-60">
+                <GoogleSlidesIcon active={false} />
               </div>
-              <p className="text-xs font-bold">Sem Cronograma</p>
-              <p className="text-[9px] uppercase font-mono">Nenhuma URL estratégica definida</p>
+              <p className="text-[11px] font-bold text-zinc-500">Sem Planejamento</p>
+              <p className="text-[8px] uppercase tracking-wider font-mono">Nenhum planejamento vinculado</p>
+            </div>
+          )}
+
+          {currentClient.operandLink ? (
+            <a 
+              href={currentClient.operandLink} 
+              target="_blank" 
+              referrerPolicy="no-referrer"
+              rel="noopener noreferrer"
+              className="flex-1 bg-white border border-blue-200 hover:border-blue-300 rounded-2xl p-4 flex flex-col justify-center items-center gap-2 hover:bg-blue-50/20 transition-all shadow-xs group cursor-pointer text-center"
+            >
+              <div className="w-10 h-10 bg-blue-50 rounded-xl flex items-center justify-center group-hover:scale-105 transition-transform shadow-3xs">
+                <OperandIcon active={true} />
+              </div>
+              <div className="text-center">
+                <p className="text-xs font-bold text-zinc-850">Operand Operacional</p>
+                <p className="text-[9px] text-zinc-455 uppercase tracking-widest font-mono mt-0.5 flex items-center justify-center gap-1">Pautas & Agenda <ExternalLink size={8} /></p>
+              </div>
+            </a>
+          ) : (
+            <div className="flex-1 bg-zinc-50/50 border border-dashed border-zinc-200 rounded-2xl p-4 flex flex-col justify-center items-center gap-1 text-center cursor-not-allowed text-zinc-400">
+              <div className="w-8 h-8 bg-zinc-100 rounded-xl flex items-center justify-center opacity-60">
+                <OperandIcon active={false} />
+              </div>
+              <p className="text-[11px] font-bold text-zinc-500">Sem Operand</p>
+              <p className="text-[8px] uppercase tracking-wider font-mono">Nenhum cronograma operacional</p>
             </div>
           )}
 

@@ -33,6 +33,7 @@ const INITIAL_FORM_STATE = {
   communicationObjectives: '',
   driveFolderLink: '',
   annualPlanningLink: '',
+  operandLink: '',
   notes: '',
   scope: {} as { [deptId: string]: string[] },
   satisfactionRating: 5,
@@ -79,6 +80,7 @@ export default function ClientFormModal({ isOpen, onClose, onSave, clientToEdit,
         communicationObjectives: clientToEdit.communicationObjectives,
         driveFolderLink: clientToEdit.driveFolderLink || '',
         annualPlanningLink: clientToEdit.annualPlanningLink || '',
+        operandLink: clientToEdit.operandLink || '',
         notes: clientToEdit.notes || '',
         scope: scopeCopy,
         satisfactionRating: clientToEdit.satisfactionRating || 5,
@@ -117,6 +119,7 @@ export default function ClientFormModal({ isOpen, onClose, onSave, clientToEdit,
         communicationObjectives: '',
         driveFolderLink: '',
         annualPlanningLink: '',
+        operandLink: '',
         notes: '',
         scope: {
           design: [],
@@ -547,7 +550,7 @@ export default function ClientFormModal({ isOpen, onClose, onSave, clientToEdit,
               4. Planejamento Estratégico & Links Externos
             </h4>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div className="space-y-1">
                 <label className="block text-xs font-semibold text-slate-700 flex items-center gap-1.5">
                   <Link2 size={13} className="text-emerald-500" />
@@ -566,16 +569,31 @@ export default function ClientFormModal({ isOpen, onClose, onSave, clientToEdit,
               <div className="space-y-1">
                 <label className="block text-xs font-semibold text-slate-700 flex items-center gap-1.5">
                   <Link2 size={13} className="text-amber-500" />
-                  Link do Planejamento Estratégico Anual (Planilha)
+                  Link do Planejamento Estratégico (Apresentação)
                 </label>
                 <input
                   type="url"
-                  placeholder="https://docs.google.com/spreadsheets/..."
+                  placeholder="https://docs.google.com/presentation/..."
                   value={formData.annualPlanningLink}
                   onChange={e => setFormData(p => ({ ...p, annualPlanningLink: e.target.value }))}
                   className="w-full text-sm px-3 py-2 border border-slate-200 rounded-lg focus:outline-hidden focus:ring-1 focus:ring-indigo-500 bg-white"
                 />
-                <span className="text-[10px] text-slate-400">Contém metas corporativas anuais e editorias de palavras-chave.</span>
+                <span className="text-[10px] text-slate-400">Contém metas corporativas e editorias de palavras-chave.</span>
+              </div>
+
+              <div className="space-y-1">
+                <label className="block text-xs font-semibold text-slate-700 flex items-center gap-1.5">
+                  <Link2 size={13} className="text-blue-500" />
+                  Link do Operand (Cronograma)
+                </label>
+                <input
+                  type="url"
+                  placeholder="https://app.operand.com.br/..."
+                  value={formData.operandLink}
+                  onChange={e => setFormData(p => ({ ...p, operandLink: e.target.value }))}
+                  className="w-full text-sm px-3 py-2 border border-slate-200 rounded-lg focus:outline-hidden focus:ring-1 focus:ring-indigo-500 bg-white"
+                />
+                <span className="text-[10px] text-slate-400">Contém as pautas operacionais e gestão de tarefas.</span>
               </div>
             </div>
 

@@ -27,6 +27,7 @@ export interface Client {
   communicationObjectives: string;
   driveFolderLink: string;
   annualPlanningLink: string;
+  operandLink?: string;
   scope: { [departmentId: string]: string[] }; // Map of departmentId -> Array of active taskIds
   createdAt: string;
   notes: string;

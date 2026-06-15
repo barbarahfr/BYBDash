@@ -18,6 +18,31 @@ import {
   X
 } from 'lucide-react';
 
+const GoogleDriveIcon = ({ active }: { active: boolean }) => (
+  <svg viewBox="0 0 512 512" className="w-3.5 h-3.5 shrink-0" fill="none">
+    <path d="M339 345l87-150-136-235H123L36 110l136 235z" fill={active ? "#FFC107" : "#cbd5e1"}/>
+    <path d="M172 345L85 495h271l87-150H172z" fill={active ? "#2196F3" : "#94a3b8"}/>
+    <path d="M36 110l136 235 86-150L122 45 36 110z" fill={active ? "#4CAF50" : "#64748b"}/>
+  </svg>
+);
+
+const GoogleSlidesIcon = ({ active }: { active: boolean }) => (
+  <svg viewBox="0 0 24 24" className="w-3.5 h-3.5 shrink-0" fill="none">
+    <rect x="3" y="3" width="18" height="18" rx="2" fill={active ? "#FFC107" : "#94a3b8"} />
+    <path d="M6 7h12v7H6V7z" fill="#FFF" />
+    <line x1="8" y1="17" x2="16" y2="17" stroke="#FFF" strokeWidth="1.5" strokeLinecap="round" />
+    <line x1="12" y1="14" x2="12" y2="17" stroke="#FFF" strokeWidth="1.5" />
+    <circle cx="12" cy="10" r="1.5" fill={active ? "#FFC107" : "#94a3b8"} />
+  </svg>
+);
+
+const OperandIcon = ({ active }: { active: boolean }) => (
+  <svg viewBox="0 0 24 24" className="w-3.5 h-3.5 shrink-0" fill="none" strokeWidth="3.5" strokeLinecap="round">
+    <circle cx="12" cy="12" r="8" stroke={active ? "#00A3FF" : "#94a3b8"} strokeWidth="3" className="opacity-80" />
+    <path d="M12 4 A 8 8 0 0 1 20 12" stroke={active ? "#0057FF" : "#64748b"} strokeWidth="3" />
+  </svg>
+);
+
 interface ClientDirectoryTableProps {
   clients: Client[];
   onEditClient: (client: Client) => void;
@@ -699,20 +724,28 @@ export default function ClientDirectoryTable({
                       </td>
 
                       <td className="py-3.5 px-4 space-y-2">
-                        <div className="flex items-center gap-2">
+                        <div className="flex flex-wrap items-center gap-2">
                           {client.driveFolderLink ? (
                             <a 
                               href={client.driveFolderLink} 
                               target="_blank" 
                               referrerPolicy="no-referrer"
                               rel="noreferrer noopener"
-                              className="px-2 py-1 rounded bg-emerald-50 text-emerald-700 border border-emerald-100 hover:bg-emerald-100 text-[10px] font-bold flex items-center gap-1 transition-all cursor-pointer"
+                              className="px-2 py-1 rounded bg-emerald-50 text-emerald-700 border border-emerald-200 hover:bg-emerald-100 text-[10px] font-bold flex items-center gap-1.5 transition-all cursor-pointer"
                               title="Pasta do Google Drive"
                             >
-                              Drive <ExternalLink size={10} />
+                              <GoogleDriveIcon active={true} />
+                              <span>Drive</span>
+                              <ExternalLink size={10} />
                             </a>
                           ) : (
-                            <span className="text-[10px] text-slate-300 border border-slate-100 px-1.5 py-0.5 rounded cursor-not-allowed">Sem Drive</span>
+                            <span 
+                              className="px-2 py-1 rounded bg-slate-100 text-slate-400 border border-slate-200 text-[10px] font-semibold flex items-center gap-1.5 cursor-not-allowed opacity-60"
+                              title="Sem Drive vinculado"
+                            >
+                              <GoogleDriveIcon active={false} />
+                              <span>Drive</span>
+                            </span>
                           )}
 
                           {client.annualPlanningLink ? (
@@ -721,19 +754,50 @@ export default function ClientDirectoryTable({
                               target="_blank" 
                               referrerPolicy="no-referrer"
                               rel="noreferrer noopener"
-                              className="px-2 py-1 rounded bg-amber-50 text-amber-700 border border-amber-100 hover:bg-amber-100 text-[10px] font-bold flex items-center gap-1 transition-all cursor-pointer"
-                              title="Planejamento Estratégico Anual"
+                              className="px-2 py-1 rounded bg-amber-50 text-amber-700 border border-amber-200 hover:bg-amber-100 text-[10px] font-bold flex items-center gap-1.5 transition-all cursor-pointer"
+                              title="Planejamento Estratégico Anual (Google Apresentações)"
                             >
-                              Planilha <ExternalLink size={10} />
+                              <GoogleSlidesIcon active={true} />
+                              <span>Apresentação</span>
+                              <ExternalLink size={10} />
                             </a>
                           ) : (
-                            <span className="text-[10px] text-slate-300 border border-slate-100 px-1.5 py-0.5 rounded cursor-not-allowed">Sem Planilha</span>
+                            <span 
+                              className="px-2 py-1 rounded bg-slate-100 text-slate-400 border border-slate-200 text-[10px] font-semibold flex items-center gap-1.5 cursor-not-allowed opacity-60"
+                              title="Sem Planejamento vinculado"
+                            >
+                              <GoogleSlidesIcon active={false} />
+                              <span>Apresentação</span>
+                            </span>
+                          )}
+
+                          {client.operandLink ? (
+                            <a 
+                              href={client.operandLink} 
+                              target="_blank" 
+                              referrerPolicy="no-referrer"
+                              rel="noreferrer noopener"
+                              className="px-2 py-1 rounded bg-blue-50 text-blue-700 border border-blue-200 hover:bg-blue-100 text-[10px] font-bold flex items-center gap-1.5 transition-all cursor-pointer"
+                              title="Link Operacional do Operand"
+                            >
+                              <OperandIcon active={true} />
+                              <span>Operand</span>
+                              <ExternalLink size={10} />
+                            </a>
+                          ) : (
+                            <span 
+                              className="px-2 py-1 rounded bg-slate-100 text-slate-400 border border-slate-200 text-[10px] font-semibold flex items-center gap-1.5 cursor-not-allowed opacity-60"
+                              title="Sem Link do Operand"
+                            >
+                              <OperandIcon active={false} />
+                              <span>Operand</span>
+                            </span>
                           )}
                         </div>
 
                         <button
                           onClick={() => setExpandedClientId(isExpanded ? null : client.id)}
-                          className="text-[10px] text-indigo-650 hover:text-indigo-850 font-bold cursor-pointer underline flex items-center"
+                          className="text-[10px] text-indigo-650 hover:text-indigo-850 font-bold cursor-pointer underline flex items-center pt-0.5"
                         >
                           {isExpanded ? 'Ocultar Detalhes' : 'Ver Objetivos & Notas'}
                         </button>
