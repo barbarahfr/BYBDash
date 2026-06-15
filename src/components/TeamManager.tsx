@@ -419,7 +419,7 @@ export default function TeamManager({
                         <div className="mb-4">
                           <p className="text-[9px] font-extrabold text-zinc-400 uppercase tracking-widest mb-1.5 flex items-center gap-1">
                             <Layers size={10} className="text-zinc-400" />
-                            Sectores Sob Responsabilidade
+                            Setores sob Coordenação
                           </p>
                           <div className="flex flex-wrap gap-1">
                             {member.supervisedDepartmentIds && member.supervisedDepartmentIds.length > 0 ? (

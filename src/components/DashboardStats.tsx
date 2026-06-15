@@ -8,11 +8,8 @@ import { Client, Department } from '../types';
 import { 
   Users, 
   Award, 
-  Layers, 
   FolderGit, 
-  TrendingUp, 
   Activity, 
-  ChevronRight, 
   ExternalLink,
   Smile
 } from 'lucide-react';
@@ -24,13 +21,13 @@ interface DashboardStatsProps {
 }
 
 export default function DashboardStats({ clients, departments, onSelectClient }: DashboardStatsProps) {
-  // Compute metrics
+  // Calcular métricas
   const totalClients = clients.length;
   const activeClients = clients.filter(c => c.status === 'Active').length;
   const onboardingClients = clients.filter(c => c.status === 'Onboarding').length;
   const pausedOrInactive = clients.filter(c => c.status === 'Paused' || c.status === 'Inactive').length;
 
-  // Active tasks across all scopes
+  // Tarefas ativas
   let totalScopedTasks = 0;
   const departmentCounts: { [key: string]: number } = {};
   
@@ -51,7 +48,7 @@ export default function DashboardStats({ clients, departments, onSelectClient }:
     });
   });
 
-  // Ranking count
+  // Quantidade de clientes por Categoria
   const rankingCounts = {
     A: clients.filter(c => c.ranking === 'A').length,
     B: clients.filter(c => c.ranking === 'B').length,
@@ -59,7 +56,7 @@ export default function DashboardStats({ clients, departments, onSelectClient }:
     D: clients.filter(c => c.ranking === 'D').length,
   };
 
-  // Satisfaction metrics
+  // Métricas de Satisfação
   const clientRatings = clients.map(c => c.satisfactionRating || 5);
   const totalRated = clientRatings.length;
   const totalSum = clientRatings.reduce((sum, r) => sum + r, 0);
@@ -73,7 +70,6 @@ export default function DashboardStats({ clients, departments, onSelectClient }:
     1: clientRatings.filter(r => r === 1).length,
   };
 
-  // Slices for the Pie/Donut Chart (only those with count > 0)
   const ratingSlices = [
     { level: 5, label: 'Excelente (5)', count: satisfactionCounts[5], fill: '#4f46e5', colorBg: 'bg-indigo-600' },
     { level: 4, label: 'Bom (4)', count: satisfactionCounts[4], fill: '#10b981', colorBg: 'bg-emerald-500' },
@@ -118,42 +114,42 @@ export default function DashboardStats({ clients, departments, onSelectClient }:
     };
   });
 
-  // Quick resource checklist (Drive & Plan links)
   const resourceClients = clients.filter(c => c.driveFolderLink || c.annualPlanningLink).slice(0, 5);
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 mb-8">
-      {/* KPI Cards section */}
+      {/* Seção de Cards KPI */}
       <div className="lg:col-span-3 grid grid-cols-1 md:grid-cols-3 gap-5">
-        {/* Total Clients Card */}
+        
+        {/* Card: Clientes Cadastrados */}
         <div id="stat-card-clients" className="bg-white rounded-xl border border-slate-100 p-5 shadow-xs flex flex-col justify-between hover:border-indigo-100 transition-all">
           <div className="flex items-center justify-between mb-4">
-            <span className="font-sans text-xs font-semibold uppercase tracking-wider text-slate-400">Registered Clients</span>
+            <span className="font-sans text-xs font-semibold uppercase tracking-wider text-slate-400">Clientes Cadastrados</span>
             <div className="p-2 bg-indigo-50 rounded-lg text-indigo-600">
               <Users size={18} />
             </div>
           </div>
           <div>
-            <div className="font-display text-3.5xl font-bold text-slate-800 tracking-tight leading-none mb-2">
+            <div className="font-display text-3.5xl font-bold text-slate-800 tracking-tight leading-none mb-22">
               {totalClients}
             </div>
             <div className="flex flex-wrap items-center gap-x-2.5 gap-y-1 text-xs text-slate-500">
-              <span className="flex items-center gap-1 font-medium text-emerald-600 bg-emerald-50 px-1.5 py-0.5 rounded">
-                <Activity size={10} /> {activeClients} Active
+              <span className="flex items-center gap-1 font-semibold text-emerald-600 bg-emerald-50 px-1.5 py-0.5 rounded">
+                <Activity size={10} /> {activeClients} Ativos
               </span>
-              <span className="text-amber-600 bg-amber-50 px-1.5 py-0.5 rounded font-medium">
+              <span className="text-amber-600 bg-amber-50 px-1.5 py-0.5 rounded font-semibold">
                 {onboardingClients} Onboarding
               </span>
               {pausedOrInactive > 0 && (
-                <span className="text-slate-500 bg-slate-50 px-1.5 py-0.5 rounded font-medium">
-                  {pausedOrInactive} Paused/Inact
+                <span className="text-slate-505 bg-slate-50 px-1.5 py-0.5 rounded font-semibold">
+                  {pausedOrInactive} Outros
                 </span>
               )}
             </div>
           </div>
         </div>
 
-        {/* Satisfaction Donut Chart Card */}
+        {/* Card: Gráfico de Satisfação */}
         <div id="stat-card-satisfaction" className="bg-white rounded-xl border border-slate-100 p-5 shadow-xs flex flex-col justify-between hover:border-indigo-50 transition-all">
           <div className="flex items-center justify-between mb-3 shrink-0">
             <span className="font-sans text-xs font-semibold uppercase tracking-wider text-slate-400">Satisfação dos Clientes</span>
@@ -162,9 +158,9 @@ export default function DashboardStats({ clients, departments, onSelectClient }:
             </div>
           </div>
           <div className="flex items-center gap-4">
-            {/* Left: SVG Donut Chart */}
+            {/* Lado Esquerdo: SVG Donut Chart */}
             <div className="w-20 h-20 shrink-0 relative flex items-center justify-center">
-              <svg viewBox="0 0 100 100" className="w-full h-full transform -rotate-90">
+              <svg viewBox="0 0 100 100" className="w-full h-full transform -rotate-90 text-center">
                 {totalRated === 0 ? (
                   <circle cx="50" cy="50" r={radius} fill="#e2e8f0" />
                 ) : ratingSlices.length === 1 ? (
@@ -179,28 +175,26 @@ export default function DashboardStats({ clients, departments, onSelectClient }:
                     />
                   ))
                 )}
-                {/* Center cutout */}
                 <circle cx="50" cy="50" r={23} fill="#ffffff" />
               </svg>
-              {/* Overlay Text */}
-              <div className="absolute inset-0 flex flex-col items-center justify-center">
-                <span className="font-display font-bold text-base text-slate-800 leading-none">
+              <div className="absolute inset-x-0 flex flex-col items-center justify-center">
+                <span className="font-display font-extrabold text-base text-slate-800 leading-none">
                   {avgSatisfaction}
                 </span>
-                <span className="text-[6.5px] font-bold text-slate-400 tracking-wider uppercase mt-0.5">
+                <span className="text-[6.5px] font-bold text-slate-405 tracking-wider uppercase mt-0.5 text-center">
                   Média
                 </span>
               </div>
             </div>
 
-            {/* Right: Legend Scale */}
-            <div className="flex-1 min-w-0 flex flex-col gap-1 justify-center">
+            {/* Lado Direito: Legenda */}
+            <div className="flex-1 min-w-0 flex flex-col gap-0.5 justify-center">
               {[
-                { level: 5, label: 'Excelente', colorBg: 'bg-indigo-600' },
+                { level: 5, label: 'Excelente', colorBg: 'bg-indigo-650' },
                 { level: 4, label: 'Bom', colorBg: 'bg-emerald-500' },
                 { level: 3, label: 'Regular', colorBg: 'bg-amber-400' },
                 { level: 2, label: 'Ruim', colorBg: 'bg-orange-500' },
-                { level: 1, label: 'Muito Ruim', colorBg: 'bg-red-500' },
+                { level: 1, label: 'Critico', colorBg: 'bg-red-500' },
               ].map(item => {
                 const count = satisfactionCounts[item.level as 5 | 4 | 3 | 2 | 1] || 0;
                 const percent = totalRated > 0 ? Math.round((count / totalRated) * 100) : 0;
@@ -227,10 +221,10 @@ export default function DashboardStats({ clients, departments, onSelectClient }:
           </div>
         </div>
 
-        {/* Rankings Breakdown Card */}
+        {/* Card: Categorias / Rankings */}
         <div id="stat-card-rankings" className="bg-white rounded-xl border border-slate-100 p-5 shadow-xs flex flex-col justify-between hover:border-amber-100 transition-all">
           <div className="flex items-center justify-between mb-4">
-            <span className="font-sans text-xs font-semibold uppercase tracking-wider text-slate-400">Agency Client Categories</span>
+            <span className="font-sans text-xs font-semibold uppercase tracking-wider text-slate-405">Carteira de Clientes (Tier)</span>
             <div className="p-2 bg-amber-50 rounded-lg text-amber-600">
               <Award size={18} />
             </div>
@@ -248,28 +242,28 @@ export default function DashboardStats({ clients, departments, onSelectClient }:
                 </div>
               ))}
             </div>
-            <p className="text-[10px] text-slate-400 mt-2 text-center">Tier A represents highest-priority enterprise</p>
+            <p className="text-[10px] text-slate-400 mt-2 text-center">A classificação A representa as contas de maior faturamento ou foco</p>
           </div>
         </div>
       </div>
 
-      {/* Quick Launchpad to Folder/Plans */}
+      {/* Acesso Rápido a links externos */}
       <div id="quick-links-panel" className="bg-slate-900 text-slate-200 rounded-xl p-5 shadow-xs border border-slate-800 flex flex-col justify-between">
         <div className="flex items-center gap-1.5 mb-3 border-b border-slate-800 pb-2">
           <FolderGit size={16} className="text-indigo-400" />
-          <h4 className="text-xs font-semibold uppercase tracking-wider text-slate-300">Quick-Launch Assets</h4>
+          <h4 className="text-xs font-semibold uppercase tracking-wider text-slate-300">Arquivos e Links</h4>
         </div>
         
         {resourceClients.length === 0 ? (
-          <p className="text-xs text-slate-500 py-3 text-center">No links configured in registered scope records.</p>
+          <p className="text-xs text-slate-500 py-3 text-center font-medium">Nenhum link estratégico cadastrado ainda.</p>
         ) : (
           <div className="space-y-2 max-h-[110px] overflow-y-auto custom-scrollbar-slate pr-1">
             {resourceClients.map(client => (
               <div key={client.id} className="flex items-center justify-between text-xs group text-slate-300 hover:text-white transition-colors">
                 <button 
                   onClick={() => onSelectClient(client)}
-                  className="font-medium text-left truncate max-w-[120px] hover:underline cursor-pointer"
-                  title="View Client Details"
+                  className="font-semibold text-left truncate max-w-[120px] hover:underline cursor-pointer"
+                  title="Ver detalhes de metas desse cliente"
                 >
                   {client.name}
                 </button>
@@ -280,10 +274,9 @@ export default function DashboardStats({ clients, departments, onSelectClient }:
                       target="_blank" 
                       referrerPolicy="no-referrer"
                       rel="noopener noreferrer"
-                      className="p-1 hover:bg-slate-800 text-indigo-300 hover:text-indigo-200 rounded transition-colors"
-                      title="Open Google Drive Link"
+                      className="p-1 hover:bg-slate-800 text-indigo-300 hover:text-indigo-200 rounded transition-colors cursor-pointer"
+                      title="Abrir pasta do Google Drive"
                     >
-                      <span className="sr-only">Drive</span>
                       <ExternalLink size={11} />
                     </a>
                   )}
@@ -293,10 +286,10 @@ export default function DashboardStats({ clients, departments, onSelectClient }:
                       target="_blank" 
                       referrerPolicy="no-referrer"
                       rel="noopener noreferrer"
-                      className="p-1 hover:bg-slate-800 text-amber-300 hover:text-amber-200 rounded transition-colors"
-                      title="Open Annual Planning Sheet"
+                      className="p-1 hover:bg-slate-800 text-amber-300 hover:text-amber-200 rounded transition-colors cursor-pointer"
+                      title="Abrir planilha de Planejamento Estratégico"
                     >
-                      <span className="text-[10px] font-mono tracking-tighter uppercase mr-0.5 text-amber-400">Plan</span>
+                      <span className="text-[9px] font-extrabold tracking-tighter uppercase mr-0.5 text-amber-400 font-mono">Plan</span>
                       <ExternalLink size={10} />
                     </a>
                   )}
@@ -306,7 +299,7 @@ export default function DashboardStats({ clients, departments, onSelectClient }:
           </div>
         )}
         <div className="text-[10px] text-slate-500 pt-1.5 border-t border-slate-800 text-right shrink-0">
-          *Open in a new tab to bypass limits
+          *Abra em nova aba se houver bloqueios
         </div>
       </div>
     </div>

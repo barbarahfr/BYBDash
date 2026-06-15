@@ -5,7 +5,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { Client, RankingType, MarketApproachType, ClientStatusType, TeamMember, CustomColumn } from '../types';
-import { X, Save, AlertCircle, Link2, User, Mail, Target, HelpCircle, LayoutGrid, CheckSquare, Square } from 'lucide-react';
+import { X, Save, AlertCircle, Link2, User, Mail, Target, LayoutGrid, CheckSquare, Square } from 'lucide-react';
 
 interface ClientFormModalProps {
   isOpen: boolean;
@@ -84,7 +84,7 @@ export default function ClientFormModal({ isOpen, onClose, onSave, clientToEdit,
         satisfactionRating: clientToEdit.satisfactionRating || 5,
       });
 
-      // Load custom fields values
+      // Carregar valores de campos personalizados
       const fields: { [colId: string]: any } = {};
       customColumns.forEach(col => {
         fields[col.id] = clientToEdit.customFields?.[col.id] !== undefined
@@ -93,7 +93,7 @@ export default function ClientFormModal({ isOpen, onClose, onSave, clientToEdit,
       });
       setCustomFields(fields);
 
-      // A sector is considered active if deep has items or exists with some defined tasks
+      // Setor do escopo ativo
       const active = Object.keys(scopeCopy).filter(
         key => scopeCopy[key] && scopeCopy[key].length > 0
       );
@@ -127,7 +127,7 @@ export default function ClientFormModal({ isOpen, onClose, onSave, clientToEdit,
         satisfactionRating: 5,
       });
       
-      // Default empty custom fields values
+      // Resetar campos personalizados
       const fields: { [colId: string]: any } = {};
       customColumns.forEach(col => {
         fields[col.id] = col.type === 'multiselect' ? [] : '';
@@ -144,13 +144,13 @@ export default function ClientFormModal({ isOpen, onClose, onSave, clientToEdit,
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData.name.trim()) {
-      setErrorMsg('Client Name is a required field.');
+      setErrorMsg('O nome do cliente ou da empresa é um campo obrigatório.');
       return;
     }
     setErrorMsg(null);
     onSave({
       ...formData,
-      customFields, // Pass custom fields values back
+      customFields,
       id: clientToEdit?.id,
     });
     onClose();
@@ -208,14 +208,9 @@ export default function ClientFormModal({ isOpen, onClose, onSave, clientToEdit,
     disabled?: boolean
   ) => {
     const currentValue = formData.responsibles[roleKey];
-    
-    // Group team members: Recommended (belonging to targetTeamIds) and Others
     const recommended = teamMembers.filter(m => targetTeamIds.includes(m.teamId));
     const others = teamMembers.filter(m => !targetTeamIds.includes(m.teamId));
-
-    // To prevent clearing old values that might have been free-text or formatted differently
     const matchedMemberExact = teamMembers.find(m => m.name === currentValue);
-    // Fallback logic, checking if exact match or if current value is empty
     const isMatched = !currentValue || !!matchedMemberExact;
 
     return (
@@ -243,7 +238,6 @@ export default function ClientFormModal({ isOpen, onClose, onSave, clientToEdit,
           
           {!disabled && (
             <>
-              {/* Fallback entry if value exists and is not exact matched */}
               {!isMatched && currentValue && (
                 <option value={currentValue}>{currentValue} (Atual / Customizado)</option>
               )}
@@ -275,7 +269,7 @@ export default function ClientFormModal({ isOpen, onClose, onSave, clientToEdit,
   };
 
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
+    <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
       <div 
         id="client-form-modal-container"
         className="bg-white rounded-xl shadow-xl border border-slate-100 max-w-2xl w-full max-h-[90vh] overflow-hidden flex flex-col transition-all transform scale-100"
@@ -284,14 +278,14 @@ export default function ClientFormModal({ isOpen, onClose, onSave, clientToEdit,
         <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
           <div>
             <h3 className="font-display font-semibold text-lg text-slate-800">
-              {clientToEdit ? `Edit Client: ${clientToEdit.name}` : 'Register New Client'}
+              {clientToEdit ? `Editar Cliente: ${clientToEdit.name}` : 'Cadastrar Novo Cliente'}
             </h3>
-            <p className="text-xs text-slate-500">Configure key roles, classification, objectives, and planning links.</p>
+            <p className="text-xs text-slate-500">Configure os responsáveis, classificação, objetivos e links estratégicos.</p>
           </div>
           <button 
             type="button"
             onClick={onClose}
-            className="p-1.5 rounded-lg text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition-colors"
+            className="p-1.5 rounded-lg text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition-colors cursor-pointer"
           >
             <X size={18} />
           </button>
@@ -309,16 +303,16 @@ export default function ClientFormModal({ isOpen, onClose, onSave, clientToEdit,
           {/* Section 1: Core Identification */}
           <div className="space-y-4">
             <h4 className="text-xs font-semibold uppercase tracking-wider text-indigo-600 border-b border-slate-100 pb-1.5">
-              1. Basic Information
+              1. Informações Básicas
             </h4>
             
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div className="md:col-span-2 space-y-1">
-                <label className="block text-xs font-semibold text-slate-700">Client / Company Name *</label>
+                <label className="block text-xs font-semibold text-slate-700">Nome do Cliente / Empresa *</label>
                 <input
                   type="text"
                   required
-                  placeholder="e.g. Aura Premium Cosmetics"
+                  placeholder="ex: Aura Cosméticos Premium"
                   value={formData.name}
                   onChange={e => setFormData(p => ({ ...p, name: e.target.value }))}
                   className="w-full text-sm px-3 py-2 border border-slate-200 rounded-lg focus:outline-hidden focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 bg-white"
@@ -326,30 +320,30 @@ export default function ClientFormModal({ isOpen, onClose, onSave, clientToEdit,
               </div>
 
               <div className="space-y-1">
-                <label className="block text-xs font-semibold text-slate-700">Client Status</label>
+                <label className="block text-xs font-semibold text-slate-700">Status do Cliente</label>
                 <select
                   value={formData.status}
                   onChange={e => setFormData(p => ({ ...p, status: e.target.value as ClientStatusType }))}
                   className="w-full text-sm px-3 py-2 border border-slate-200 rounded-lg focus:outline-hidden focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 bg-white"
                 >
-                  <option value="Active">🟢 Active</option>
+                  <option value="Active">🟢 Ativo</option>
                   <option value="Onboarding">🟡 Onboarding</option>
-                  <option value="Paused">🟠 Paused</option>
-                  <option value="Inactive">⚫ Inactive</option>
+                  <option value="Paused">🟠 Pausado</option>
+                  <option value="Inactive">⚫ Inativo</option>
                 </select>
               </div>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div className="space-y-1">
-                <label className="block text-xs font-semibold text-slate-700">Market Approach</label>
+                <label className="block text-xs font-semibold text-slate-700">Abordagem de Mercado</label>
                 <div className="grid grid-cols-2 gap-2 mt-1">
                   {(['B2B', 'B2C'] as const).map(approach => (
                     <button
                       key={approach}
                       type="button"
                       onClick={() => setFormData(p => ({ ...p, marketApproach: approach }))}
-                      className={`py-1.5 px-3 rounded-lg border text-xs font-medium transition-all ${
+                      className={`py-1.5 px-3 rounded-lg border text-xs font-medium transition-all cursor-pointer ${
                         formData.marketApproach === approach
                           ? 'border-indigo-600 bg-indigo-50 text-indigo-700 font-semibold'
                           : 'border-slate-200 bg-white text-slate-600 hover:bg-slate-50'
@@ -363,16 +357,16 @@ export default function ClientFormModal({ isOpen, onClose, onSave, clientToEdit,
 
               <div className="space-y-1">
                 <label className="block text-xs font-semibold text-slate-700">
-                  Client Category
+                  Categoria / Classificação
                 </label>
                 <div className="grid grid-cols-4 gap-1 mt-1">
                   {(['A', 'B', 'C', 'D'] as const).map(tier => (
                     <button
                       key={tier}
                       type="button"
-                      title={`Tier ${tier}`}
+                      title={`Categoria ${tier}`}
                       onClick={() => setFormData(p => ({ ...p, ranking: tier }))}
-                      className={`py-1.5 px-1 rounded-lg border text-xs font-semibold transition-all ${
+                      className={`py-1.5 px-1 rounded-lg border text-xs font-semibold transition-all cursor-pointer ${
                         formData.ranking === tier
                           ? tier === 'A'
                             ? 'border-rose-500 bg-rose-50 text-rose-700'
@@ -391,10 +385,10 @@ export default function ClientFormModal({ isOpen, onClose, onSave, clientToEdit,
               </div>
 
               <div className="space-y-1">
-                <label className="block text-xs font-semibold text-slate-700">Market Segment / Niche</label>
+                <label className="block text-xs font-semibold text-slate-700">Nicho / Segmento</label>
                 <input
                   type="text"
-                  placeholder="e.g. Beauty, SaaS, Real Estate"
+                  placeholder="ex: Beleza, Cosméticos, SaaS"
                   value={formData.segment}
                   onChange={e => setFormData(p => ({ ...p, segment: e.target.value }))}
                   className="w-full text-sm px-3 py-2 border border-slate-200 rounded-lg focus:outline-hidden focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 bg-white"
@@ -406,11 +400,11 @@ export default function ClientFormModal({ isOpen, onClose, onSave, clientToEdit,
               <div className="space-y-1">
                 <label className="block text-xs font-semibold text-slate-700 flex items-center gap-1.5">
                   <Mail size={13} className="text-slate-400" />
-                  Contact Email Address
+                  E-mail de Contato Principal
                 </label>
                 <input
                   type="email"
-                  placeholder="e.g. client.manager@company.com"
+                  placeholder="ex: contato@empresa.com"
                   value={formData.contactEmail}
                   onChange={e => setFormData(p => ({ ...p, contactEmail: e.target.value }))}
                   className="w-full text-sm px-3 py-2 border border-slate-200 rounded-lg focus:outline-hidden focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 bg-white"
@@ -424,11 +418,11 @@ export default function ClientFormModal({ isOpen, onClose, onSave, clientToEdit,
                 <div className="flex items-center gap-1.5 mt-1">
                   {[1, 2, 3, 4, 5].map((level) => {
                     const ratings = [
-                      { label: 'Muito Insatisfeito', color: 'bg-red-500 text-white border-red-500 hover:bg-red-600', ring: 'focus:ring-red-500' },
-                      { label: 'Insatisfeito', color: 'bg-orange-500 text-white border-orange-500 hover:bg-orange-600', ring: 'focus:ring-orange-500' },
-                      { label: 'Neutro', color: 'bg-amber-400 text-zinc-900 border-amber-400 hover:bg-amber-500', ring: 'focus:ring-amber-400' },
-                      { label: 'Satisfeito', color: 'bg-emerald-500 text-white border-emerald-500 hover:bg-emerald-600', ring: 'focus:ring-emerald-500' },
-                      { label: 'Totalmente Satisfeito', color: 'bg-indigo-600 text-white border-indigo-600 hover:bg-indigo-700', ring: 'focus:ring-indigo-600' }
+                      { label: 'Muito Insatisfeito', color: 'bg-red-500 text-white border-red-500 hover:bg-red-600' },
+                      { label: 'Insatisfeito', color: 'bg-orange-500 text-white border-orange-500 hover:bg-orange-600' },
+                      { label: 'Neutro', color: 'bg-amber-400 text-zinc-900 border-amber-400 hover:bg-amber-505' },
+                      { label: 'Satisfeito', color: 'bg-emerald-500 text-white border-emerald-500 hover:bg-emerald-600' },
+                      { label: 'Totalmente Satisfeito', color: 'bg-indigo-600 text-white border-indigo-600 hover:bg-indigo-700' }
                     ];
                     const opt = ratings[level - 1];
                     const isSelected = formData.satisfactionRating === level;
@@ -441,7 +435,7 @@ export default function ClientFormModal({ isOpen, onClose, onSave, clientToEdit,
                         onClick={() => setFormData(p => ({ ...p, satisfactionRating: level }))}
                         className={`w-9 h-9 rounded-full border flex items-center justify-center font-bold text-sm transition-all focus:outline-hidden cursor-pointer select-none ${
                           isSelected 
-                            ? `${opt.color} scale-105 border-transparent shadow-md` 
+                            ? `${opt.color} scale-105 border-transparent shadow-md font-extrabold` 
                             : 'bg-white border-slate-200 text-slate-600 hover:border-slate-300 hover:bg-slate-50'
                         }`}
                       >
@@ -465,9 +459,9 @@ export default function ClientFormModal({ isOpen, onClose, onSave, clientToEdit,
           <div className="space-y-4">
             <h4 id="client-form-scope-header" className="text-xs font-semibold uppercase tracking-wider text-indigo-600 border-b border-slate-100 pb-1.5 flex items-center gap-2">
               <LayoutGrid size={14} />
-              2. Escopo
+              2. Áreas de Atuação (Escopo ativo)
             </h4>
-            <p className="text-xs text-slate-500">Selecione quais os setores/escopos estão incluídos no contrato deste cliente:</p>
+            <p className="text-xs text-slate-500">Selecione quais os setores/escopos estão incluídos no contrato ativo deste cliente:</p>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
               {SECTOR_OPTIONS.map(sector => {
                 const isSelected = selectedSectors.includes(sector.id);
@@ -476,7 +470,7 @@ export default function ClientFormModal({ isOpen, onClose, onSave, clientToEdit,
                     key={sector.id}
                     type="button"
                     onClick={() => handleToggleSector(sector.id)}
-                    className={`flex items-center gap-2.5 p-3 rounded-xl border text-left transition-all ${
+                    className={`flex items-center gap-2.5 p-3 rounded-xl border text-left transition-all cursor-pointer ${
                       isSelected
                         ? 'border-indigo-600 bg-indigo-50/50 text-indigo-950 shadow-xs'
                         : 'border-slate-200 bg-white text-slate-500 hover:bg-slate-50'
@@ -498,54 +492,49 @@ export default function ClientFormModal({ isOpen, onClose, onSave, clientToEdit,
           <div className="space-y-4">
             <h4 id="client-form-responsibles-header" className="text-xs font-semibold uppercase tracking-wider text-indigo-600 border-b border-slate-100 pb-1.5 flex items-center gap-2">
               <User size={14} />
-              3. Equipe responsável
+              3. Atribuição de Responsáveis da Equipe
             </h4>
             <p className="text-xs text-slate-500">
               Selecione os responsáveis para cada departamento. As funções de setores específicos serão liberadas apenas se o setor correspondente estiver ativado acima.
             </p>
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {/* Atendimento is always enabled */}
               {renderMemberSelect(
                 'Atendimento',
                 'serviceLiaison',
-                'Selecione o profissional de Atendimento',
+                'Selecione o Liaison de Atendimento',
                 ['team_paid_media', 'team_automations_crm'],
                 false
               )}
 
-              {/* Design is enabled only if sector 'design' is active */}
               {renderMemberSelect(
-                'Design',
+                'Design / Criativos',
                 'designer',
-                'Selecione o designer responsável',
+                'Selecione o Designer responsável',
                 ['team_design'],
                 !selectedSectors.includes('design')
               )}
 
-              {/* Mídias Sociais is enabled only if sector 'social_media' is active */}
               {renderMemberSelect(
-                'Mídias Sociais',
+                'Mídias Sociais / Social Media',
                 'socialMedia',
-                'Selecione o profissional de Mídias Sociais',
+                'Selecione o profissional de Social Media',
                 ['team_social_media'],
                 !selectedSectors.includes('social_media')
               )}
 
-              {/* Analista de Mídias Pagas is enabled only if sector 'paid_media' is active */}
               {renderMemberSelect(
-                'Analista de Mídias Pagas',
+                'Gestão de Tráfego / Mídias Pagas',
                 'paidTrafficHandler',
-                'Selecione o gestor de tráfego pago',
+                'Selecione o Gestor de Mídias Pagas',
                 ['team_paid_media'],
                 !selectedSectors.includes('paid_media')
               )}
 
-              {/* Analista de Conteúdo e SEO is enabled only if sector 'content_seo' is active */}
               {renderMemberSelect(
-                'Analista de Conteúdo e SEO',
+                'Redação / Conteúdo e SEO',
                 'writer',
-                'Selecione o redator/coprodutor de conteúdo',
+                'Selecione o Redator/Gerente de Conteúdo',
                 ['team_content_seo', 'team_social_media'],
                 !selectedSectors.includes('content_seo')
               )}
@@ -555,14 +544,14 @@ export default function ClientFormModal({ isOpen, onClose, onSave, clientToEdit,
           {/* Section 4: Links & Strategic Data */}
           <div className="space-y-4">
             <h4 className="text-xs font-semibold uppercase tracking-wider text-indigo-600 border-b border-slate-100 pb-1.5">
-              4. Planejamento Estratégico & Links
+              4. Planejamento Estratégico & Links Externos
             </h4>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-1">
                 <label className="block text-xs font-semibold text-slate-700 flex items-center gap-1.5">
                   <Link2 size={13} className="text-emerald-500" />
-                  Google Drive Folder Link
+                  Link da Pasta de Criativos (Google Drive)
                 </label>
                 <input
                   type="url"
@@ -571,13 +560,13 @@ export default function ClientFormModal({ isOpen, onClose, onSave, clientToEdit,
                   onChange={e => setFormData(p => ({ ...p, driveFolderLink: e.target.value }))}
                   className="w-full text-sm px-3 py-2 border border-slate-200 rounded-lg focus:outline-hidden focus:ring-1 focus:ring-indigo-500 bg-white"
                 />
-                <span className="text-[10px] text-slate-400">Stores logos, raw images, and design templates.</span>
+                <span className="text-[10px] text-slate-400">Armazena logotipos, fontes, imagens e criativos brutos.</span>
               </div>
 
               <div className="space-y-1">
                 <label className="block text-xs font-semibold text-slate-700 flex items-center gap-1.5">
                   <Link2 size={13} className="text-amber-500" />
-                  Annual Strategy / Planning Link
+                  Link do Planejamento Estratégico Anual (Planilha)
                 </label>
                 <input
                   type="url"
@@ -586,32 +575,32 @@ export default function ClientFormModal({ isOpen, onClose, onSave, clientToEdit,
                   onChange={e => setFormData(p => ({ ...p, annualPlanningLink: e.target.value }))}
                   className="w-full text-sm px-3 py-2 border border-slate-200 rounded-lg focus:outline-hidden focus:ring-1 focus:ring-indigo-500 bg-white"
                 />
-                <span className="text-[10px] text-slate-400">Contains annual goals and keyword calendars.</span>
+                <span className="text-[10px] text-slate-400">Contém metas corporativas anuais e editorias de palavras-chave.</span>
               </div>
             </div>
 
             <div className="space-y-1">
               <label className="block text-xs font-semibold text-slate-700 flex items-center gap-1.5">
                 <Target size={13} className="text-slate-400" />
-                Communication Objectives or Goals
+                Objetivos e Metas Próximas de Comunicação
               </label>
               <textarea
                 rows={3}
-                placeholder="List major deliverables, quarterly targets, tone constraints..."
+                placeholder="Descreva as metas trimestrais, deliverables principais, restrições ou tom de voz de posicionamento..."
                 value={formData.communicationObjectives}
                 onChange={e => setFormData(p => ({ ...p, communicationObjectives: e.target.value }))}
-                className="w-full text-sm px-3 py-2 border border-slate-200 rounded-lg focus:outline-hidden focus:ring-1 focus:ring-indigo-500 bg-white custom-scrollbar"
+                className="w-full text-sm px-3 py-2 border border-slate-200 rounded-lg focus:outline-hidden focus:ring-1 focus:ring-indigo-500 bg-white custom-scrollbar text-slate-750"
               />
             </div>
 
             <div className="space-y-1">
-              <label className="block text-xs font-semibold text-slate-700">Internal Remarks / Notes</label>
+              <label className="block text-xs font-semibold text-slate-700">Observações Gerais / Notas Internas</label>
               <textarea
                 rows={2}
-                placeholder="Specific preferences, billing dates, client hours constraints..."
+                placeholder="Preferências específicas do cliente, datas importantes de faturamento ou avisos..."
                 value={formData.notes}
                 onChange={e => setFormData(p => ({ ...p, notes: e.target.value }))}
-                className="w-full text-sm px-3 py-2 border border-slate-200 rounded-lg focus:outline-hidden focus:ring-1 focus:ring-indigo-500 bg-white custom-scrollbar"
+                className="w-full text-sm px-3 py-2 border border-slate-200 rounded-lg focus:outline-hidden focus:ring-1 focus:ring-indigo-500 bg-white custom-scrollbar text-slate-750"
               />
             </div>
           </div>
@@ -620,9 +609,9 @@ export default function ClientFormModal({ isOpen, onClose, onSave, clientToEdit,
           {customColumns.length > 0 && (
             <div className="space-y-4">
               <h4 id="client-form-custom-fields-header" className="text-xs font-semibold uppercase tracking-wider text-indigo-600 border-b border-slate-100 pb-1.5">
-                5. Campos Personalizados
+                5. Campos Personalizados Dinâmicos
               </h4>
-              <p className="text-xs text-slate-500">Preencha as informações adicionais customizadas para este cliente:</p>
+              <p className="text-xs text-slate-500">Adicione as informações complementares necessárias definidas para sua agência:</p>
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {customColumns.map(col => {
@@ -632,32 +621,32 @@ export default function ClientFormModal({ isOpen, onClose, onSave, clientToEdit,
                     <div key={col.id} className="space-y-1 text-left">
                       <label className="block text-xs font-semibold text-slate-700 flex items-center justify-between">
                         <span>{col.name}</span>
-                        <span className="text-[9px] text-slate-400 capitalize bg-slate-100 px-1.5 py-0.5 rounded">
-                          {col.type === 'multiselect' ? 'Múltipla Escolha' : col.type === 'dropdown' ? 'Seleção Dropdown' : col.type === 'link' ? 'Link Clicável' : 'Texto Simples'}
+                        <span className="text-[9px] text-slate-405 font-mono capitalize bg-slate-100 px-1.5 py-0.5 rounded">
+                          {col.type === 'multiselect' ? 'Multi' : col.type === 'dropdown' ? 'Dropdown' : col.type === 'link' ? 'Link' : 'Texto'}
                         </span>
                       </label>
                       
                       {col.type === 'text' && (
                         <input
                           type="text"
-                          placeholder={`Digite o conteúdo de ${col.name}`}
+                          placeholder={`Digite o conteúdo para ${col.name}`}
                           value={val || ''}
                           onChange={e => setCustomFields(prev => ({ ...prev, [col.id]: e.target.value }))}
-                          className="w-full text-sm px-3 py-2 border border-slate-200 rounded-lg focus:outline-hidden focus:ring-1 focus:ring-indigo-500 bg-white"
+                          className="w-full text-sm px-3 py-2 border border-slate-200 rounded-lg focus:outline-hidden focus:ring-1 focus:ring-indigo-500 bg-white text-slate-800"
                         />
                       )}
 
                       {col.type === 'link' && (
                         <div className="relative">
-                          <span className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
-                            <span className="text-xs">🔗</span>
+                          <span className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400 text-xs">
+                            🔗
                           </span>
                           <input
                             type="url"
                             placeholder="https://..."
                             value={val || ''}
                             onChange={e => setCustomFields(prev => ({ ...prev, [col.id]: e.target.value }))}
-                            className="w-full text-sm pl-8 pr-3 py-2 border border-slate-200 rounded-lg focus:outline-hidden focus:ring-1 focus:ring-indigo-500 bg-white"
+                            className="w-full text-sm pl-8 pr-3 py-2 border border-slate-200 rounded-lg focus:outline-hidden focus:ring-1 focus:ring-indigo-500 bg-white text-slate-850"
                           />
                         </div>
                       )}
@@ -666,7 +655,7 @@ export default function ClientFormModal({ isOpen, onClose, onSave, clientToEdit,
                         <select
                           value={val || ''}
                           onChange={e => setCustomFields(prev => ({ ...prev, [col.id]: e.target.value }))}
-                          className="w-full text-sm px-3 py-2 border border-slate-250 rounded-lg focus:outline-hidden focus:ring-1 focus:ring-indigo-500 bg-white"
+                          className="w-full text-sm px-3 py-2 border border-slate-200 rounded-lg focus:outline-hidden focus:ring-1 focus:ring-indigo-500 bg-white text-slate-700"
                         >
                           <option value="">Selecione uma opção...</option>
                           {(col.options || []).map(opt => (
@@ -690,11 +679,11 @@ export default function ClientFormModal({ isOpen, onClose, onSave, clientToEdit,
                                     : [...activeList, opt];
                                   setCustomFields(prev => ({ ...prev, [col.id]: nextList }));
                                 }}
-                                className={`px-2 py-1 rounded text-[11px] font-semibold transition-all border ${
+                                className={`px-2 py-1 rounded text-[11px] font-semibold transition-all border cursor-pointer ${
                                   isSelected
-                                    ? 'bg-indigo-600 border-indigo-600 text-white shadow-xs'
+                                    ? 'bg-indigo-600 border-indigo-650 text-white shadow-xs font-bold'
                                     : 'bg-white border-slate-200 text-slate-600 hover:bg-slate-100'
-                                }`}
+                                  }`}
                               >
                                 {isSelected ? '✓ ' : ''}{opt}
                               </button>
@@ -718,9 +707,9 @@ export default function ClientFormModal({ isOpen, onClose, onSave, clientToEdit,
           <button
             type="button"
             onClick={onClose}
-            className="px-4 py-2 text-xs font-semibold text-slate-600 hover:text-slate-800 bg-white hover:bg-slate-50 border border-slate-200 rounded-lg cursor-pointer"
+            className="px-4 py-2 text-xs font-semibold text-slate-500 hover:text-slate-750 bg-white hover:bg-slate-50 border border-slate-200 rounded-lg cursor-pointer"
           >
-            Cancel
+            Cancelar
           </button>
           <button
             type="button"
@@ -728,7 +717,7 @@ export default function ClientFormModal({ isOpen, onClose, onSave, clientToEdit,
             className="px-4 py-2 text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 rounded-lg flex items-center gap-1.5 shadow-sm hover:shadow-md transition-all cursor-pointer"
           >
             <Save size={14} />
-            {clientToEdit ? 'Accept and Save Changes' : 'Register Service Client'}
+            {clientToEdit ? 'Salvar Alterações' : 'Cadastrar Cliente'}
           </button>
         </div>
       </div>

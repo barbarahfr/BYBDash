@@ -165,7 +165,7 @@ export default function CollaboratorProfileModal({
                 <Smile size={14} className="text-indigo-500" /> Índice de Satisfação dos Clientes
               </h4>
               <span className="text-[10px] bg-indigo-50 text-indigo-600 px-2.5 py-0.5 rounded-full font-bold border border-indigo-100 uppercase tracking-wider">
-                Dos carteiras em que atua
+                Das carteiras em que atua
               </span>
             </div>
 
@@ -307,7 +307,7 @@ export default function CollaboratorProfileModal({
         {/* Modal Secondary Footer */}
         <div className="px-6 py-4 border-t border-zinc-150 bg-zinc-50 flex items-center justify-between shrink-0">
           <p className="text-[9.5px] font-semibold text-zinc-400 tracking-wider">
-            Sempre atualizado com o banco de responsabilidades offline.
+            Sincronizado em tempo real com o banco de dados.
           </p>
 
           <div className="flex gap-2">

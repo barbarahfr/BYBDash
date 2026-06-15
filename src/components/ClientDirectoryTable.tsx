@@ -7,7 +7,6 @@ import React, { useState, useMemo } from 'react';
 import { Client, RankingType, ClientStatusType, MarketApproachType, CustomColumn } from '../types';
 import { 
   Search, 
-  Filter, 
   Edit, 
   Trash2, 
   ArrowUpDown, 
@@ -15,12 +14,7 @@ import {
   Plus,
   Compass,
   FileCheck2,
-  Mail,
-  User,
-  MoreVertical,
-  Activity,
   Columns,
-  Settings,
   X
 } from 'lucide-react';
 
@@ -177,8 +171,8 @@ export default function ClientDirectoryTable({
       let valB: any;
 
       if (sortField === 'responsibles.serviceLiaison') {
-        valA = a.responsibles.serviceLiaison.toLowerCase();
-        valB = b.responsibles.serviceLiaison.toLowerCase();
+        valA = (a.responsibles.serviceLiaison || '').toLowerCase();
+        valB = (b.responsibles.serviceLiaison || '').toLowerCase();
       } else {
         valA = a[sortField];
         valB = b[sortField];
@@ -214,7 +208,7 @@ export default function ClientDirectoryTable({
             </span>
             <input
               type="text"
-              placeholder="Search clients, email, or responsibles..."
+              placeholder="Buscar por clientes, e-mails ou responsáveis..."
               value={search}
               onChange={e => setSearch(e.target.value)}
               className="w-full text-xs pl-9 pr-4 py-2 border border-slate-200 rounded-lg focus:outline-hidden focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 bg-white"
@@ -227,7 +221,7 @@ export default function ClientDirectoryTable({
               disabled={search === '' && statusFilter === 'All' && rankingFilter === 'All' && approachFilter === 'All' && segmentSearch === ''}
               className="px-3 py-2 text-xs font-medium text-slate-500 hover:text-indigo-600 disabled:opacity-40 disabled:text-slate-400 hover:bg-slate-100/50 rounded-lg transition-all cursor-pointer"
             >
-              Reset Filters
+              Limpar Filtros
             </button>
 
             <button
@@ -235,7 +229,7 @@ export default function ClientDirectoryTable({
               className={`px-3 py-2 text-xs font-semibold rounded-lg flex items-center gap-1.5 cursor-pointer transition-all border ${
                 showColManager
                   ? 'bg-indigo-50 border-indigo-200 text-indigo-700 font-bold'
-                  : 'bg-white border-slate-205 hover:bg-slate-50 text-slate-705 font-medium'
+                  : 'bg-white border-slate-200 hover:bg-slate-50 text-slate-700 font-medium'
               }`}
             >
               <Columns size={13} />
@@ -247,7 +241,7 @@ export default function ClientDirectoryTable({
               className="px-3.5 py-2 text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg flex items-center gap-1.5 shadow-xs cursor-pointer transition-all"
             >
               <Plus size={14} />
-              Register New Client
+              Cadastrar Novo Cliente
             </button>
           </div>
         </div>
@@ -265,7 +259,7 @@ export default function ClientDirectoryTable({
               <button
                 type="button"
                 onClick={() => setShowColManager(false)}
-                className="text-slate-450 hover:text-slate-600 hover:bg-slate-50 p-1 rounded-sm transition-colors cursor-pointer"
+                className="text-slate-400 hover:text-slate-600 hover:bg-slate-50 p-1 rounded-sm transition-colors cursor-pointer"
               >
                 <X size={14} />
               </button>
@@ -274,7 +268,7 @@ export default function ClientDirectoryTable({
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
               {/* Form to Add / Edit */}
               <form onSubmit={handleSaveColumn} className="lg:col-span-1 bg-slate-50/50 p-3.5 rounded-lg border border-slate-100 space-y-3">
-                <h5 className="font-bold text-[10px] uppercase text-indigo-750 tracking-wider">
+                <h5 className="font-bold text-[10px] uppercase text-indigo-700 tracking-wider">
                   {editingColumn ? 'Editar Coluna Ativa' : 'Criar Nova Coluna'}
                 </h5>
                 
@@ -322,7 +316,7 @@ export default function ClientDirectoryTable({
                 <div className="flex items-center gap-2 pt-1">
                   <button
                     type="submit"
-                    className="flex-1 px-3 py-1.5 text-[11px] font-bold text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg cursor-pointer text-center"
+                    className="flex-1 px-3 py-1.5 text-[11px] font-bold text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg cursor-pointer text-center animate-pulse"
                   >
                     {editingColumn ? 'Salvar Alterações' : 'Adicionar Coluna'}
                   </button>
@@ -352,7 +346,7 @@ export default function ClientDirectoryTable({
                 ) : (
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-2 max-h-[180px] overflow-y-auto custom-scrollbar pr-1">
                     {customColumns.map(col => (
-                      <div key={col.id} className="flex items-center justify-between p-2.5 bg-slate-50 hover:bg-slate-100/50 border border-slate-150 rounded-lg group transition-all">
+                      <div key={col.id} className="flex items-center justify-between p-2.5 bg-slate-50 hover:bg-slate-100/50 border border-slate-200 rounded-lg group transition-all">
                         <div className="space-y-0.5 min-w-0">
                           <div className="text-[11px] font-bold text-slate-800 truncate" title={col.name}>
                             {col.name}
@@ -373,7 +367,7 @@ export default function ClientDirectoryTable({
                           <button
                             type="button"
                             onClick={() => handleStartEditColumn(col)}
-                            className="p-1 rounded text-slate-450 hover:text-indigo-600 hover:bg-white border border-transparent hover:border-slate-100 transition-colors cursor-pointer"
+                            className="p-1 rounded text-slate-400 hover:text-indigo-600 hover:bg-white border border-transparent hover:border-slate-100 transition-colors cursor-pointer"
                             title="Editar Definição"
                           >
                             <Edit size={12} />
@@ -388,7 +382,7 @@ export default function ClientDirectoryTable({
                                 }
                               }
                             }}
-                            className="p-1 rounded text-slate-450 hover:text-rose-600 hover:bg-white border border-transparent hover:border-slate-100 transition-colors cursor-pointer"
+                            className="p-1 rounded text-slate-400 hover:text-rose-600 hover:bg-white border border-transparent hover:border-slate-100 transition-colors cursor-pointer"
                             title="Excluir Coluna"
                           >
                             <Trash2 size={12} />
@@ -411,55 +405,55 @@ export default function ClientDirectoryTable({
             <select
               value={statusFilter}
               onChange={e => setStatusFilter(e.target.value)}
-              className="w-full text-xs px-2.5 py-1.5 border border-slate-200 rounded-lg bg-white focus:ring-1 focus:ring-indigo-500"
+              className="w-full text-xs px-2.5 py-1.5 border border-slate-200 rounded-lg bg-white focus:ring-1 focus:ring-indigo-500 text-slate-705 font-medium"
             >
-              <option value="All">All statuses</option>
-              <option value="Active">Active</option>
-              <option value="Onboarding">Onboarding</option>
-              <option value="Paused">Paused</option>
-              <option value="Inactive">Inactive</option>
+              <option value="All">Todos os status</option>
+              <option value="Active">Ativos</option>
+              <option value="Onboarding">Integração (Onboarding)</option>
+              <option value="Paused">Pausados</option>
+              <option value="Inactive">Inativos</option>
             </select>
           </div>
 
           {/* Ranking Filter */}
           <div className="space-y-1">
-            <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wider">Category Tier</label>
+            <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wider">Categoria / Classificação</label>
             <select
               value={rankingFilter}
               onChange={e => setRankingFilter(e.target.value)}
-              className="w-full text-xs px-2.5 py-1.5 border border-slate-200 rounded-lg bg-white focus:ring-1 focus:ring-indigo-500"
+              className="w-full text-xs px-2.5 py-1.5 border border-slate-200 rounded-lg bg-white focus:ring-1 focus:ring-indigo-500 text-slate-705 font-medium"
             >
-              <option value="All">All Tiers (A-D)</option>
-              <option value="A">Category A (High)</option>
-              <option value="B">Category B</option>
-              <option value="C">Category C</option>
-              <option value="D">Category D (Low)</option>
+              <option value="All">Todas as Categorias (A-D)</option>
+              <option value="A">Categoria A (Alta Prioridade)</option>
+              <option value="B">Categoria B</option>
+              <option value="C">Categoria C</option>
+              <option value="D">Categoria D (Baixa Prioridade)</option>
             </select>
           </div>
 
           {/* Market Approach */}
           <div className="space-y-1">
-            <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wider">Market Approach</label>
+            <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wider">Abordagem de Mercado</label>
             <select
               value={approachFilter}
               onChange={e => setApproachFilter(e.target.value)}
-              className="w-full text-xs px-2.5 py-1.5 border border-slate-200 rounded-lg bg-white focus:ring-1 focus:ring-indigo-500"
+              className="w-full text-xs px-2.5 py-1.5 border border-slate-200 rounded-lg bg-white focus:ring-1 focus:ring-indigo-500 text-slate-705 font-medium"
             >
-              <option value="All">All approaches</option>
-              <option value="B2B">B2B Core</option>
-              <option value="B2C">B2C Retail</option>
+              <option value="All">Todas as abordagens</option>
+              <option value="B2B">Essencial B2B</option>
+              <option value="B2C">Varejo B2C</option>
             </select>
           </div>
 
           {/* Segment Filter */}
           <div className="space-y-1">
-            <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wider">Segment Niche</label>
+            <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wider">Nicho / Segmento</label>
             <input
               type="text"
-              placeholder="e.g. Cosmetics"
+              placeholder="ex: Cosméticos, Vestuário"
               value={segmentSearch}
               onChange={e => setSegmentSearch(e.target.value)}
-              className="w-full text-xs px-2.5 py-1.5 border border-slate-200 rounded-lg bg-white focus:ring-1 focus:ring-indigo-500"
+              className="w-full text-xs px-2.5 py-1.5 border border-slate-200 rounded-lg bg-white focus:ring-1 focus:ring-indigo-500 text-slate-705 font-medium"
               list="segments-datalist"
             />
             <datalist id="segments-datalist">
@@ -474,10 +468,10 @@ export default function ClientDirectoryTable({
         <table className="w-full text-left border-collapse">
           <thead>
             <tr className="border-b border-slate-100 bg-slate-50 text-slate-500 font-sans text-[10px] font-bold uppercase tracking-wider select-none">
-              <th className="py-3 px-4 w-12 text-center">Row</th>
+              <th className="py-3 px-4 w-12 text-center">Nº</th>
               <th className="py-3 px-4 min-w-[180px] cursor-pointer hover:bg-slate-100 transition-colors" onClick={() => handleSort('name')}>
                 <div className="flex items-center gap-1.5">
-                  Client & Tier
+                  Cliente & Categoria
                   <ArrowUpDown size={11} className="text-slate-400" />
                 </div>
               </th>
@@ -494,24 +488,24 @@ export default function ClientDirectoryTable({
               </th>
               <th className="py-3 px-3 min-w-[124px] cursor-pointer hover:bg-slate-100 transition-colors" onClick={() => handleSort('responsibles.serviceLiaison')}>
                 <div className="flex items-center gap-1.5">
-                  Service Liaison
+                  Atendimento (Liaison)
                   <ArrowUpDown size={11} className="text-slate-400" />
                 </div>
               </th>
-              <th className="py-3 px-3 min-w-[200px]">Creative & Traffic Staff</th>
+              <th className="py-3 px-3 min-w-[200px]">Equipe Criativa & Tráfego Staff</th>
               <th className="py-3 px-3 min-w-[140px]" onClick={() => handleSort('segment')}>
                 <div className="flex items-center gap-1.5">
-                  Approaches & Segment
+                  Abordagem & Segmento
                   <ArrowUpDown size={11} className="text-slate-400" />
                 </div>
               </th>
-              <th className="py-3 px-4 min-w-[150px]">Links & Objectives</th>
+              <th className="py-3 px-4 min-w-[150px]">Links & Objetivos</th>
               {customColumns.map(col => (
                 <th key={col.id} className="py-3 px-3 min-w-[140px] text-left select-none text-[10px] font-bold text-slate-500 uppercase tracking-wider">
                   {col.name}
                 </th>
               ))}
-              <th className="py-3 px-3 min-w-[90px] text-center">Actions</th>
+              <th className="py-3 px-3 min-w-[90px] text-center">Ações</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-slate-100 text-xs">
@@ -519,13 +513,13 @@ export default function ClientDirectoryTable({
               <tr>
                 <td colSpan={9 + customColumns.length} className="text-center py-10 text-slate-400">
                   <div className="space-y-2">
-                    <p className="font-semibold text-slate-600">No client registers matched your filtered range.</p>
-                    <p className="text-xs">Try relaxing search strings, status selections, or create a brand new client profile.</p>
+                    <p className="font-semibold text-slate-600">Nenhum cliente atende aos filtros selecionados.</p>
+                    <p className="text-xs">Tente ajustar o termo de pesquisa, limpar filtros ou cadastrar um novo cliente no diretório.</p>
                     <button 
                       onClick={clearFilters}
-                      className="px-3 py-1.5 mt-2 text-xs font-semibold bg-indigo-50 hover:bg-indigo-100 text-indigo-700 rounded-lg cursor-pointer"
+                      className="px-3 py-1.5 mt-2 text-xs font-semibold bg-indigo-50 hover:bg-indigo-100 text-indigo-700 rounded-lg cursor-pointer animate-pulse"
                     >
-                      Clear Active Filters
+                      Limpar Filtros Ativos
                     </button>
                   </div>
                 </td>
@@ -534,14 +528,12 @@ export default function ClientDirectoryTable({
               processedClients.map((client, index) => {
                 const isExpanded = expandedClientId === client.id;
                 
-                // Color mapping for Ranking
                 const rankColor = 
                   client.ranking === 'A' ? 'bg-rose-50 text-rose-700 border-rose-200' :
                   client.ranking === 'B' ? 'bg-amber-50 text-amber-700 border-amber-200' :
                   client.ranking === 'C' ? 'bg-blue-50 text-blue-700 border-blue-200' :
                   'bg-slate-100 text-slate-600 border-slate-300';
 
-                // Status Badge Color
                 const statusColor = 
                   client.status === 'Active' ? 'text-emerald-700 bg-emerald-50 border-emerald-200' :
                   client.status === 'Onboarding' ? 'text-amber-700 bg-amber-50 border-amber-200' :
@@ -554,32 +546,30 @@ export default function ClientDirectoryTable({
                     <tr 
                       className={`hover:bg-slate-50/50 transition-colors group ${isExpanded ? 'bg-indigo-50/25' : ''}`}
                     >
-                      {/* Row Counter Index */}
                       <td className="text-center py-3.5 px-3 text-slate-400 font-mono text-[11px] border-r border-slate-100">
                         {index + 1}
                       </td>
 
-                      {/* Client Name & Corporate Rank */}
                       <td className="py-3.5 px-4">
                         <div className="font-semibold text-slate-800 text-sm">{client.name}</div>
                         <div className="flex items-center gap-1.5 mt-1">
-                          <span className={`px-1.5 py-0.5 rounded text-[10px] font-extrabold border uppercase tracking-wider ${rankColor}`} title="Agency Tier Ranking">
+                          <span className={`px-1.5 py-0.5 rounded text-[10px] font-extrabold border uppercase tracking-wider ${rankColor}`} title="Categoria/Prioridade do Cliente">
                             {client.ranking}
                           </span>
                           <span className="text-[10px] text-slate-400 truncate max-w-[150px]" title={client.contactEmail}>
-                            {client.contactEmail || 'No contact email'}
+                            {client.contactEmail || 'Sem e-mail cadastrado'}
                           </span>
                         </div>
                       </td>
 
-                      {/* Status Selector */}
                       <td className="py-3.5 px-3 text-center">
                         <span className={`inline-block px-2.5 py-0.5 rounded-full text-[10px] font-semibold border ${statusColor}`}>
-                          {client.status}
+                          {client.status === 'Active' ? 'Ativo' :
+                           client.status === 'Onboarding' ? 'Onboarding' :
+                           client.status === 'Paused' ? 'Pausado' : 'Inativo'}
                         </span>
                       </td>
 
-                      {/* Satisfaction Thermometer Rating */}
                       <td className="py-3.5 px-3">
                         {(() => {
                           const rating = client.satisfactionRating || 5;
@@ -600,7 +590,6 @@ export default function ClientDirectoryTable({
                                 <span>{config.emoji}</span>
                                 <span>{config.label}</span>
                               </span>
-                              {/* 5 dots representing rating */}
                               <div className="flex gap-0.5">
                                 {[1, 2, 3, 4, 5].map(dot => (
                                   <div 
@@ -621,24 +610,22 @@ export default function ClientDirectoryTable({
                         })()}
                       </td>
 
-                      {/* Service Responsible */}
                       <td className="py-3.5 px-3">
                         <div className="flex items-center gap-1.5">
                           <div className="w-5 h-5 rounded-full bg-indigo-50 flex items-center justify-center text-[10px] font-bold text-indigo-600 shrink-0 uppercase">
-                            {(client.responsibles.serviceLiaison || 'U')[0]}
+                            {(client.responsibles.serviceLiaison || 'S')[0]}
                           </div>
                           <span 
-                            onClick={() => client.responsibles.serviceLiaison && client.responsibles.serviceLiaison !== 'Unassigned' && onViewCollaboratorByName?.(client.responsibles.serviceLiaison)}
-                            className={`font-medium truncate max-w-[124px] ${client.responsibles.serviceLiaison && client.responsibles.serviceLiaison !== 'Unassigned' ? 'cursor-pointer hover:text-indigo-600 hover:underline transition-all text-slate-700' : 'text-slate-400'}`} 
+                            onClick={() => client.responsibles.serviceLiaison && client.responsibles.serviceLiaison !== 'Unassigned' && client.responsibles.serviceLiaison !== 'Sem designação' && onViewCollaboratorByName?.(client.responsibles.serviceLiaison)}
+                            className={`font-medium truncate max-w-[124px] ${client.responsibles.serviceLiaison && client.responsibles.serviceLiaison !== 'Unassigned' && client.responsibles.serviceLiaison !== 'Sem designação' ? 'cursor-pointer hover:text-indigo-600 hover:underline transition-all text-slate-705 font-bold' : 'text-slate-400'}`} 
                             title={client.responsibles.serviceLiaison ? "Ver perfil do colaborador" : undefined}
                           >
-                            {client.responsibles.serviceLiaison || 'Unassigned'}
+                            {client.responsibles.serviceLiaison || 'Sem designação'}
                           </span>
                         </div>
                       </td>
 
-                      {/* Sector Specialists */}
-                      <td className="py-3.5 px-3 text-slate-600 space-y-1 text-[11px]">
+                      <td className="py-3.5 px-3 text-slate-650 space-y-1 text-[11px]">
                         {(() => {
                           const hasDesign = client.scope?.design && client.scope.design.length > 0;
                           const hasPaidMedia = client.scope?.paid_media && client.scope.paid_media.length > 0;
@@ -653,10 +640,10 @@ export default function ClientDirectoryTable({
                             <>
                               {hasContentSeo && (
                                 <div className="flex items-center gap-1">
-                                  <span className="w-11 text-right text-[10px] font-semibold text-slate-400">Writer:</span>
+                                  <span className="w-12 text-right text-[10px] font-bold text-slate-400 uppercase">Redator:</span>
                                   <span 
-                                    onClick={() => client.responsibles?.writer && client.responsibles.writer !== '—' && onViewCollaboratorByName?.(client.responsibles.writer)}
-                                    className={`font-medium truncate max-w-[124px] ${client.responsibles?.writer && client.responsibles.writer !== '—' && client.responsibles.writer !== 'Unassigned' ? 'cursor-pointer hover:text-indigo-600 hover:underline transition-all text-slate-700 font-bold' : 'text-slate-400'}`}
+                                    onClick={() => client.responsibles?.writer && client.responsibles.writer !== '—' && client.responsibles.writer !== 'Unassigned' && onViewCollaboratorByName?.(client.responsibles.writer)}
+                                    className={`font-semibold truncate max-w-[124px] ${client.responsibles?.writer && client.responsibles.writer !== '—' && client.responsibles.writer !== 'Unassigned' ? 'cursor-pointer hover:text-indigo-600 hover:underline transition-all text-slate-800' : 'text-slate-450'}`}
                                     title={client.responsibles?.writer ? "Ver perfil do colaborador" : undefined}
                                   >
                                     {client.responsibles?.writer || '—'}
@@ -665,10 +652,10 @@ export default function ClientDirectoryTable({
                               )}
                               {hasDesign && (
                                 <div className="flex items-center gap-1">
-                                  <span className="w-11 text-right text-[10px] font-semibold text-slate-400">Design:</span>
+                                  <span className="w-12 text-right text-[10px] font-bold text-slate-400 uppercase">Design:</span>
                                   <span 
-                                    onClick={() => client.responsibles?.designer && client.responsibles.designer !== '—' && onViewCollaboratorByName?.(client.responsibles.designer)}
-                                    className={`font-medium truncate max-w-[124px] ${client.responsibles?.designer && client.responsibles.designer !== '—' && client.responsibles.designer !== 'Unassigned' ? 'cursor-pointer hover:text-indigo-600 hover:underline transition-all text-slate-700 font-bold' : 'text-slate-400'}`}
+                                    onClick={() => client.responsibles?.designer && client.responsibles.designer !== '—' && client.responsibles.designer !== 'Unassigned' && onViewCollaboratorByName?.(client.responsibles.designer)}
+                                    className={`font-semibold truncate max-w-[124px] ${client.responsibles?.designer && client.responsibles.designer !== '—' && client.responsibles.designer !== 'Unassigned' ? 'cursor-pointer hover:text-indigo-600 hover:underline transition-all text-slate-800' : 'text-slate-450'}`}
                                     title={client.responsibles?.designer ? "Ver perfil do colaborador" : undefined}
                                   >
                                     {client.responsibles?.designer || '—'}
@@ -677,10 +664,10 @@ export default function ClientDirectoryTable({
                               )}
                               {hasPaidMedia && (
                                 <div className="flex items-center gap-1">
-                                  <span className="w-11 text-right text-[10px] font-semibold text-slate-400">Traffic:</span>
+                                  <span className="w-12 text-right text-[10px] font-bold text-slate-400 uppercase">Tráfego:</span>
                                   <span 
-                                    onClick={() => client.responsibles?.paidTrafficHandler && client.responsibles.paidTrafficHandler !== '—' && onViewCollaboratorByName?.(client.responsibles.paidTrafficHandler)}
-                                    className={`font-medium truncate max-w-[124px] ${client.responsibles?.paidTrafficHandler && client.responsibles.paidTrafficHandler !== '—' && client.responsibles.paidTrafficHandler !== 'Unassigned' ? 'cursor-pointer hover:text-indigo-600 hover:underline transition-all text-slate-700 font-bold' : 'text-slate-400'}`}
+                                    onClick={() => client.responsibles?.paidTrafficHandler && client.responsibles.paidTrafficHandler !== '—' && client.responsibles.paidTrafficHandler !== 'Unassigned' && onViewCollaboratorByName?.(client.responsibles.paidTrafficHandler)}
+                                    className={`font-semibold truncate max-w-[124px] ${client.responsibles?.paidTrafficHandler && client.responsibles.paidTrafficHandler !== '—' && client.responsibles.paidTrafficHandler !== 'Unassigned' ? 'cursor-pointer hover:text-indigo-600 hover:underline transition-all text-slate-800' : 'text-slate-450'}`}
                                     title={client.responsibles?.paidTrafficHandler ? "Ver perfil do colaborador" : undefined}
                                   >
                                     {client.responsibles?.paidTrafficHandler || '—'}
@@ -689,10 +676,10 @@ export default function ClientDirectoryTable({
                               )}
                               {hasSocialMedia && (
                                 <div className="flex items-center gap-1">
-                                  <span className="w-11 text-right text-[10px] font-semibold text-slate-400">Social:</span>
+                                  <span className="w-12 text-right text-[10px] font-bold text-slate-400 uppercase">Social:</span>
                                   <span 
-                                    onClick={() => client.responsibles?.socialMedia && client.responsibles.socialMedia !== '—' && onViewCollaboratorByName?.(client.responsibles.socialMedia)}
-                                    className={`font-medium truncate max-w-[124px] ${client.responsibles?.socialMedia && client.responsibles.socialMedia !== '—' && client.responsibles.socialMedia !== 'Unassigned' ? 'cursor-pointer hover:text-indigo-600 hover:underline transition-all text-slate-700 font-bold' : 'text-slate-400'}`}
+                                    onClick={() => client.responsibles?.socialMedia && client.responsibles.socialMedia !== '—' && client.responsibles.socialMedia !== 'Unassigned' && onViewCollaboratorByName?.(client.responsibles.socialMedia)}
+                                    className={`font-semibold truncate max-w-[124px] ${client.responsibles?.socialMedia && client.responsibles.socialMedia !== '—' && client.responsibles.socialMedia !== 'Unassigned' ? 'cursor-pointer hover:text-indigo-600 hover:underline transition-all text-slate-800' : 'text-slate-450'}`}
                                     title={client.responsibles?.socialMedia ? "Ver perfil do colaborador" : undefined}
                                   >
                                     {client.responsibles?.socialMedia || '—'}
@@ -704,17 +691,14 @@ export default function ClientDirectoryTable({
                         })()}
                       </td>
 
-                      {/* Market segment & Approach */}
                       <td className="py-3.5 px-3">
-                        <div className="font-semibold text-slate-800">{client.segment || 'Other Segment'}</div>
+                        <div className="font-semibold text-slate-800 text-[12px]">{client.segment || 'Outro Segmento'}</div>
                         <div className="text-[10px] text-slate-400 mt-0.5 font-medium flex items-center gap-1">
-                          <Compass size={11} /> {client.marketApproach || 'B2C'} Client segment
+                          <Compass size={11} /> Foco {client.marketApproach || 'B2C'}
                         </div>
                       </td>
 
-                      {/* Links and objectives */}
                       <td className="py-3.5 px-4 space-y-2">
-                        {/* Interactive direct links */}
                         <div className="flex items-center gap-2">
                           {client.driveFolderLink ? (
                             <a 
@@ -722,13 +706,13 @@ export default function ClientDirectoryTable({
                               target="_blank" 
                               referrerPolicy="no-referrer"
                               rel="noreferrer noopener"
-                              className="px-2 py-1 rounded bg-emerald-50 text-emerald-700 border border-emerald-100 hover:bg-emerald-100 text-[10px] font-bold flex items-center gap-1 transition-all"
-                              title="Google Drive Assets"
+                              className="px-2 py-1 rounded bg-emerald-50 text-emerald-700 border border-emerald-100 hover:bg-emerald-100 text-[10px] font-bold flex items-center gap-1 transition-all cursor-pointer"
+                              title="Pasta do Google Drive"
                             >
                               Drive <ExternalLink size={10} />
                             </a>
                           ) : (
-                            <span className="text-[10px] text-slate-300 border border-slate-100 px-1.5 py-0.5 rounded cursor-not-allowed">No Drive</span>
+                            <span className="text-[10px] text-slate-300 border border-slate-100 px-1.5 py-0.5 rounded cursor-not-allowed">Sem Drive</span>
                           )}
 
                           {client.annualPlanningLink ? (
@@ -737,98 +721,90 @@ export default function ClientDirectoryTable({
                               target="_blank" 
                               referrerPolicy="no-referrer"
                               rel="noreferrer noopener"
-                              className="px-2 py-1 rounded bg-amber-50 text-amber-700 border border-amber-100 hover:bg-amber-100 text-[10px] font-bold flex items-center gap-1 transition-all"
-                              title="Annual Strategic Planning Document"
+                              className="px-2 py-1 rounded bg-amber-50 text-amber-700 border border-amber-100 hover:bg-amber-100 text-[10px] font-bold flex items-center gap-1 transition-all cursor-pointer"
+                              title="Planejamento Estratégico Anual"
                             >
-                              Planning <ExternalLink size={10} />
+                              Planilha <ExternalLink size={10} />
                             </a>
                           ) : (
-                            <span className="text-[10px] text-slate-300 border border-slate-100 px-1.5 py-0.5 rounded cursor-not-allowed">No Plan</span>
+                            <span className="text-[10px] text-slate-300 border border-slate-100 px-1.5 py-0.5 rounded cursor-not-allowed">Sem Planilha</span>
                           )}
                         </div>
 
-                        {/* Objectives preview toggle */}
                         <button
                           onClick={() => setExpandedClientId(isExpanded ? null : client.id)}
-                          className="text-[10px] text-indigo-600 hover:text-indigo-800 font-semibold cursor-pointer underline flex items-center"
+                          className="text-[10px] text-indigo-650 hover:text-indigo-850 font-bold cursor-pointer underline flex items-center"
                         >
-                          {isExpanded ? 'Hide Objectives' : 'Show Goals & Notes'}
+                          {isExpanded ? 'Ocultar Detalhes' : 'Ver Objetivos & Notas'}
                         </button>
                       </td>
 
-                      {/* Dynamic Custom Column values */}
                       {customColumns.map(col => {
                         const val = client.customFields?.[col.id];
                         
                         return (
                           <td key={col.id} className="py-3.5 px-3 max-w-[150px] truncate">
                             {(() => {
-                              if (val === undefined || val === null || val === '') {
-                                return <span className="text-slate-300 italic text-[10px]">Vazio</span>;
-                              }
-                              
-                              if (col.type === 'link') {
-                                return (
-                                  <a 
-                                    href={val}
-                                    target="_blank"
-                                    referrerPolicy="no-referrer"
-                                    rel="noreferrer noopener"
-                                    className="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-100 font-bold text-[10px] transition-all truncate max-w-full cursor-pointer"
-                                    title={val}
-                                  >
-                                    Link <ExternalLink size={9} />
-                                  </a>
-                                );
-                              }
-                              
-                              if (col.type === 'dropdown') {
-                                return (
-                                  <span className="inline-block px-2 py-0.5 border border-slate-200 bg-slate-50 text-slate-700 rounded text-[10px] font-semibold">
-                                    {val}
-                                  </span>
-                                );
-                              }
-                              
-                              if (col.type === 'multiselect') {
-                                const list = Array.isArray(val) ? val : [val];
-                                if (list.length === 0) return <span className="text-slate-300 italic text-[10px]">Nenhum</span>;
-                                return (
-                                  <div className="flex flex-wrap gap-1 max-w-full">
-                                    {list.map(item => (
-                                      <span key={item} className="inline-block px-1.5 py-0.2 border border-indigo-100 bg-indigo-50/50 text-indigo-700 rounded text-[9px] font-bold">
-                                        {item}
-                                      </span>
-                                    ))}
-                                  </div>
-                                );
-                              }
-                              
-                              // Text type
-                              return <span className="text-slate-700 font-medium text-[11px]">{val}</span>;
+                               if (val === undefined || val === null || val === '') {
+                                 return <span className="text-slate-300 italic text-[10px]">Vazio</span>;
+                               }
+                               
+                               if (col.type === 'link') {
+                                 return (
+                                   <a 
+                                     href={val}
+                                     target="_blank"
+                                     referrerPolicy="no-referrer"
+                                     rel="noreferrer noopener"
+                                     className="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-100 font-bold text-[10px] transition-all truncate max-w-full cursor-pointer"
+                                     title={val}
+                                   >
+                                     Link <ExternalLink size={9} />
+                                   </a>
+                                 );
+                               }
+                               
+                               if (col.type === 'dropdown') {
+                                 return (
+                                   <span className="inline-block px-2 py-0.5 border border-slate-200 bg-slate-50 text-slate-700 rounded text-[10px] font-semibold">
+                                     {val}
+                                   </span>
+                                 );
+                               }
+                               
+                               if (col.type === 'multiselect') {
+                                 const list = Array.isArray(val) ? val : [val];
+                                 if (list.length === 0) return <span className="text-slate-300 italic text-[10px]">Nenhum</span>;
+                                 return (
+                                   <div className="flex flex-wrap gap-1 max-w-full">
+                                     {list.map(item => (
+                                       <span key={item} className="inline-block px-1.5 py-0.2 border border-indigo-100 bg-indigo-50/50 text-indigo-700 rounded text-[9px] font-bold">
+                                         {item}
+                                       </span>
+                                     ))}
+                                   </div>
+                                 );
+                               }
+                               
+                               return <span className="text-slate-700 font-semibold text-[11px]">{val}</span>;
                             })()}
                           </td>
                         );
                       })}
 
-                      {/* Action Cell */}
                       <td className="py-3.5 px-3 text-center">
                         <div className="flex items-center justify-center gap-1">
                           <button
                             onClick={() => onEditClient(client)}
-                            className="p-1.5 rounded-lg text-slate-500 hover:text-indigo-600 hover:bg-indigo-50/80 transition-all cursor-pointer"
-                            title="Edit Client Register Details"
+                            className="p-1.5 rounded-lg text-slate-550 hover:text-indigo-650 hover:bg-indigo-50 transition-all cursor-pointer"
+                            title="Editar Dados de Cadastro"
                           >
                             <Edit size={14} />
                           </button>
                           <button
-                            onClick={() => {
-                              if (window.confirm(`Are you absolutely sure you want to permanently delete client directory "${client.name}" and erase their entire scope matrix?`)) {
-                                onDeleteClient(client.id);
-                              }
-                            }}
-                            className="p-1.5 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50/80 transition-all cursor-pointer"
-                            title="Delete Client Register"
+                            onClick={() => onDeleteClient(client.id)}
+                            className="p-1.5 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition-all cursor-pointer"
+                            title="Excluir do Diretório"
                           >
                             <Trash2 size={14} />
                           </button>
@@ -843,20 +819,22 @@ export default function ClientDirectoryTable({
                         <td colSpan={7 + customColumns.length} className="bg-slate-50/70 p-4 border-l-2 border-indigo-500">
                           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs text-slate-700">
                             <div className="space-y-1.5">
-                              <h5 className="font-bold text-slate-800 text-[11px] uppercase tracking-wider flex items-center gap-1"><FileCheck2 size={13} className="text-slate-400" /> Communication Objectives</h5>
-                              <p className="text-slate-600 leading-relaxed bg-white border border-slate-200/50 p-2.5 rounded-lg text-[11px] min-h-[50px]">
-                                {client.communicationObjectives || 'No objectives specified currently. Edit this record to add targets.'}
+                              <h5 className="font-bold text-slate-800 text-[11px] uppercase tracking-wider flex items-center gap-1">
+                                <FileCheck2 size={13} className="text-slate-400" /> Objetivos de Comunicação
+                              </h5>
+                              <p className="text-slate-650 leading-relaxed bg-white border border-slate-200 p-2.5 rounded-lg text-[11px] min-h-[50px] whitespace-pre-wrap">
+                                {client.communicationObjectives || 'Nenhum objetivo especificado no momento. Edite este registro para adicioná-los.'}
                               </p>
                             </div>
                             
                             <div className="space-y-1.5">
-                              <h5 className="font-bold text-slate-800 text-[11px] uppercase tracking-wider flex items-center gap-1">🗒️ Internal Notes</h5>
-                              <p className="text-slate-600 leading-relaxed bg-white border border-slate-200/50 p-2.5 rounded-lg text-[11px] min-h-[50px]">
-                                {client.notes || 'No internal remarks or warnings regarding this client register.'}
+                              <h5 className="font-bold text-slate-800 text-[11px] uppercase tracking-wider flex items-center gap-1">🗒️ Observações Internas</h5>
+                              <p className="text-slate-650 leading-relaxed bg-white border border-slate-200 p-2.5 rounded-lg text-[11px] min-h-[50px] whitespace-pre-wrap">
+                                {client.notes || 'Nenhuma observação ou aviso interno sobre este registro de cliente.'}
                               </p>
                               {client.createdAt && (
-                                <div className="text-[10px] text-slate-400 text-right mt-1">
-                                  Registered on {new Date(client.createdAt).toLocaleDateString()}
+                                <div className="text-[10px] text-slate-400 text-right mt-1 font-mono">
+                                  Cadastrado em: {new Date(client.createdAt).toLocaleDateString()}
                                 </div>
                               )}
                             </div>
@@ -875,10 +853,10 @@ export default function ClientDirectoryTable({
       {/* Row counter info footer */}
       <div className="px-5 py-3 border-t border-slate-100 bg-slate-50 text-slate-400 text-[10px] font-semibold flex items-center justify-between">
         <div>
-          Showing <span className="text-slate-600">{processedClients.length}</span> of {clients.length} registers
+          Exibindo <span className="text-slate-600">{processedClients.length}</span> de {clients.length} cadastros
         </div>
         <div>
-          *Tip: Double-click any edit icon to quickly update role mappings
+          *Dica: Clique no nome do funcionário para ver seu cadastro unificado e rendimento.
         </div>
       </div>
     </div>

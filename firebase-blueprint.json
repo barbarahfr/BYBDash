@@ -1,0 +1,106 @@
+{
+  "entities": {
+    "Department": {
+      "title": "Department",
+      "description": "A business department managing specific operations",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Unique identifier" },
+        "name": { "type": "string", "description": "Name of the department" },
+        "color": { "type": "string", "description": "Color code for UI styling" },
+        "tasks": {
+          "type": "array",
+          "description": "Tasks available under this department"
+        }
+      },
+      "required": ["id", "name"]
+    },
+    "CustomColumn": {
+      "title": "CustomColumn",
+      "description": "A dynamic custom column definition for clients directory",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Unique identifier" },
+        "name": { "type": "string", "description": "Display name of the column" },
+        "type": { "type": "string", "description": "Field type: text, link, dropdown or multiselect" },
+        "options": { "type": "array", "description": "Options list if dropdown or multiselect" }
+      },
+      "required": ["id", "name", "type"]
+    },
+    "Team": {
+      "title": "Team",
+      "description": "A specialized collaborator team",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Unique identifier" },
+        "name": { "type": "string", "description": "Team name" },
+        "coordinatorId": { "type": "string", "description": "ID of the coordinating team member" }
+      },
+      "required": ["id", "name"]
+    },
+    "TeamMember": {
+      "title": "TeamMember",
+      "description": "A member of the agency team",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Unique identifier" },
+        "name": { "type": "string", "description": "Full name of the team member" },
+        "email": { "type": "string", "description": "Email address" },
+        "role": { "type": "string", "description": "Job title or role description" },
+        "teamId": { "type": "string", "description": "Associated team ID" },
+        "isCoordinator": { "type": "boolean", "description": "Whether this member can coordinate teams" },
+        "supervisedDepartmentIds": { "type": "array", "description": "Department IDs managed if they are a coordinator" }
+      },
+      "required": ["id", "name", "email", "role", "teamId", "isCoordinator"]
+    },
+    "Client": {
+      "title": "Client",
+      "description": "An agency client profile containing communications scope and assignments",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Unique identifier" },
+        "name": { "type": "string", "description": "Company or client name" },
+        "status": { "type": "string", "description": "Direct state: Active, Paused, Onboarding, Inactive" },
+        "ranking": { "type": "string", "description": "Tier ranking: A, B, C, D" },
+        "responsibles": {
+          "type": "object",
+          "description": "Accountable team members per activity key"
+        },
+        "contactEmail": { "type": "string", "description": "Client main contact email" },
+        "marketApproach": { "type": "string", "description": "B2B or B2C" },
+        "segment": { "type": "string", "description": "Business sector or vertical" },
+        "communicationObjectives": { "type": "string", "description": "Strategic communication goals" },
+        "driveFolderLink": { "type": "string", "description": "External Google Drive link" },
+        "annualPlanningLink": { "type": "string", "description": "External tactical planning link" },
+        "scope": { "type": "object", "description": "Map of departmentId -> list of active taskIds" },
+        "createdAt": { "type": "string", "description": "Record creation timestamp" },
+        "notes": { "type": "string", "description": "Additional administrative commentary" },
+        "satisfactionRating": { "type": "number", "description": "Satisfaction score on a scale from 1 to 5" },
+        "customFields": { "type": "object", "description": "Dynamic key-value parameters based on customColumns" }
+      },
+      "required": ["id", "name", "status", "ranking", "responsibles", "scope"]
+    }
+  },
+  "firestore": {
+    "/departments/{departmentId}": {
+      "schema": "Department",
+      "description": "Service departments config collection"
+    },
+    "/customColumns/{columnId}": {
+      "schema": "CustomColumn",
+      "description": "Dynamic client attribute columns metadata collection"
+    },
+    "/teams/{teamId}": {
+      "schema": "Team",
+      "description": "Formed collaborator teams collection"
+    },
+    "/teamMembers/{memberId}": {
+      "schema": "TeamMember",
+      "description": "All agency human resource profiles collection"
+    },
+    "/clients/{clientId}": {
+      "schema": "Client",
+      "description": "Main agency database profiles collection"
+    }
+  }
+}
