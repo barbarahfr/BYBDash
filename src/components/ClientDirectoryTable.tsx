@@ -724,27 +724,24 @@ export default function ClientDirectoryTable({
                       </td>
 
                       <td className="py-3.5 px-4 space-y-2">
-                        <div className="flex flex-wrap items-center gap-2">
+                        <div className="flex items-center gap-1.5">
                           {client.driveFolderLink ? (
                             <a 
                               href={client.driveFolderLink} 
                               target="_blank" 
                               referrerPolicy="no-referrer"
                               rel="noreferrer noopener"
-                              className="px-2 py-1 rounded bg-emerald-50 text-emerald-700 border border-emerald-200 hover:bg-emerald-100 text-[10px] font-bold flex items-center gap-1.5 transition-all cursor-pointer"
+                              className="p-1.5 rounded-lg bg-emerald-50 text-emerald-700 border border-emerald-200 hover:bg-emerald-100 hover:border-emerald-300 transition-all cursor-pointer flex items-center justify-center shadow-3xs hover:scale-105"
                               title="Pasta do Google Drive"
                             >
                               <GoogleDriveIcon active={true} />
-                              <span>Drive</span>
-                              <ExternalLink size={10} />
                             </a>
                           ) : (
                             <span 
-                              className="px-2 py-1 rounded bg-slate-100 text-slate-400 border border-slate-200 text-[10px] font-semibold flex items-center gap-1.5 cursor-not-allowed opacity-60"
+                              className="p-1.5 rounded-lg bg-slate-50 text-slate-400 border border-slate-200 flex items-center justify-center opacity-50 cursor-not-allowed"
                               title="Sem Drive vinculado"
                             >
                               <GoogleDriveIcon active={false} />
-                              <span>Drive</span>
                             </span>
                           )}
 
@@ -754,20 +751,17 @@ export default function ClientDirectoryTable({
                               target="_blank" 
                               referrerPolicy="no-referrer"
                               rel="noreferrer noopener"
-                              className="px-2 py-1 rounded bg-amber-50 text-amber-700 border border-amber-200 hover:bg-amber-100 text-[10px] font-bold flex items-center gap-1.5 transition-all cursor-pointer"
+                              className="p-1.5 rounded-lg bg-amber-50 text-amber-700 border border-amber-200 hover:bg-amber-100 hover:border-amber-300 transition-all cursor-pointer flex items-center justify-center shadow-3xs hover:scale-105"
                               title="Planejamento Estratégico Anual (Google Apresentações)"
                             >
                               <GoogleSlidesIcon active={true} />
-                              <span>Apresentação</span>
-                              <ExternalLink size={10} />
                             </a>
                           ) : (
                             <span 
-                              className="px-2 py-1 rounded bg-slate-100 text-slate-400 border border-slate-200 text-[10px] font-semibold flex items-center gap-1.5 cursor-not-allowed opacity-60"
+                              className="p-1.5 rounded-lg bg-slate-50 text-slate-400 border border-slate-200 flex items-center justify-center opacity-50 cursor-not-allowed"
                               title="Sem Planejamento vinculado"
                             >
                               <GoogleSlidesIcon active={false} />
-                              <span>Apresentação</span>
                             </span>
                           )}
 
@@ -777,20 +771,17 @@ export default function ClientDirectoryTable({
                               target="_blank" 
                               referrerPolicy="no-referrer"
                               rel="noreferrer noopener"
-                              className="px-2 py-1 rounded bg-blue-50 text-blue-700 border border-blue-200 hover:bg-blue-100 text-[10px] font-bold flex items-center gap-1.5 transition-all cursor-pointer"
+                              className="p-1.5 rounded-lg bg-blue-50 text-blue-700 border border-blue-200 hover:bg-blue-100 hover:border-blue-300 transition-all cursor-pointer flex items-center justify-center shadow-3xs hover:scale-105"
                               title="Link Operacional do Operand"
                             >
                               <OperandIcon active={true} />
-                              <span>Operand</span>
-                              <ExternalLink size={10} />
                             </a>
                           ) : (
                             <span 
-                              className="px-2 py-1 rounded bg-slate-100 text-slate-400 border border-slate-200 text-[10px] font-semibold flex items-center gap-1.5 cursor-not-allowed opacity-60"
+                              className="p-1.5 rounded-lg bg-slate-50 text-slate-400 border border-slate-200 flex items-center justify-center opacity-50 cursor-not-allowed"
                               title="Sem Link do Operand"
                             >
                               <OperandIcon active={false} />
-                              <span>Operand</span>
                             </span>
                           )}
                         </div>
