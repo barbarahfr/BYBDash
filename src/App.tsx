@@ -961,6 +961,7 @@ export default function App() {
         clientToEdit={editingClient}
         teamMembers={teamMembers}
         customColumns={customColumns}
+        departments={departments}
       />
 
       {/* Collaborator Profile Modal */}

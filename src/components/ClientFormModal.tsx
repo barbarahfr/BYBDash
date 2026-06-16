@@ -4,7 +4,7 @@
  */
 
 import React, { useState, useEffect } from 'react';
-import { Client, RankingType, MarketApproachType, ClientStatusType, TeamMember, CustomColumn } from '../types';
+import { Client, RankingType, MarketApproachType, ClientStatusType, TeamMember, CustomColumn, Department } from '../types';
 import { X, Save, AlertCircle, Link2, User, Mail, Target, LayoutGrid, CheckSquare, Square } from 'lucide-react';
 
 interface ClientFormModalProps {
@@ -14,6 +14,7 @@ interface ClientFormModalProps {
   clientToEdit?: Client | null;
   teamMembers: TeamMember[];
   customColumns: CustomColumn[];
+  departments: Department[];
 }
 
 const INITIAL_FORM_STATE = {
@@ -39,14 +40,15 @@ const INITIAL_FORM_STATE = {
   satisfactionRating: 5,
 };
 
-const SECTOR_OPTIONS = [
-  { id: 'design', name: 'Design', label: 'Design' },
-  { id: 'paid_media', name: 'Mídias Pagas', label: 'Mídias Pagas' },
-  { id: 'content_seo', name: 'Conteúdo e SEO', label: 'Conteúdo e SEO' },
-  { id: 'social_media', name: 'Mídias Sociais', label: 'Mídias Sociais' },
-];
-
-export default function ClientFormModal({ isOpen, onClose, onSave, clientToEdit, teamMembers = [], customColumns = [] }: ClientFormModalProps) {
+export default function ClientFormModal({ 
+  isOpen, 
+  onClose, 
+  onSave, 
+  clientToEdit, 
+  teamMembers = [], 
+  customColumns = [],
+  departments = []
+}: ClientFormModalProps) {
   const [formData, setFormData] = useState(INITIAL_FORM_STATE);
   const [selectedSectors, setSelectedSectors] = useState<string[]>([]);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
@@ -62,12 +64,12 @@ export default function ClientFormModal({ isOpen, onClose, onSave, clientToEdit,
         socialMedia: clientToEdit.responsibles?.socialMedia || '',
       };
       
-      const scopeCopy = clientToEdit.scope ? { ...clientToEdit.scope } : {
-        design: [],
-        paid_media: [],
-        content_seo: [],
-        social_media: [],
-      };
+      const scopeCopy = { ...clientToEdit.scope };
+      departments.forEach(dept => {
+        if (!scopeCopy[dept.id]) {
+          scopeCopy[dept.id] = [];
+        }
+      });
 
       setFormData({
         name: clientToEdit.name,
@@ -102,6 +104,11 @@ export default function ClientFormModal({ isOpen, onClose, onSave, clientToEdit,
       setSelectedSectors(active);
       setErrorMsg(null);
     } else {
+      const initialScope: { [deptId: string]: string[] } = {};
+      departments.forEach(dept => {
+        initialScope[dept.id] = [];
+      });
+
       setFormData({
         name: '',
         status: 'Active' as ClientStatusType,
@@ -121,12 +128,7 @@ export default function ClientFormModal({ isOpen, onClose, onSave, clientToEdit,
         annualPlanningLink: '',
         operandLink: '',
         notes: '',
-        scope: {
-          design: [],
-          paid_media: [],
-          content_seo: [],
-          social_media: [],
-        },
+        scope: initialScope,
         satisfactionRating: 5,
       });
       
@@ -140,7 +142,7 @@ export default function ClientFormModal({ isOpen, onClose, onSave, clientToEdit,
       setSelectedSectors([]);
       setErrorMsg(null);
     }
-  }, [clientToEdit, isOpen, customColumns]);
+  }, [clientToEdit, isOpen, customColumns, departments]);
 
   if (!isOpen) return null;
 
@@ -465,14 +467,14 @@ export default function ClientFormModal({ isOpen, onClose, onSave, clientToEdit,
               2. Áreas de Atuação (Escopo ativo)
             </h4>
             <p className="text-xs text-slate-500">Selecione quais os setores/escopos estão incluídos no contrato ativo deste cliente:</p>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-              {SECTOR_OPTIONS.map(sector => {
-                const isSelected = selectedSectors.includes(sector.id);
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
+              {departments.map(dept => {
+                const isSelected = selectedSectors.includes(dept.id);
                 return (
                   <button
-                    key={sector.id}
+                    key={dept.id}
                     type="button"
-                    onClick={() => handleToggleSector(sector.id)}
+                    onClick={() => handleToggleSector(dept.id)}
                     className={`flex items-center gap-2.5 p-3 rounded-xl border text-left transition-all cursor-pointer ${
                       isSelected
                         ? 'border-indigo-600 bg-indigo-50/50 text-indigo-950 shadow-xs'
@@ -484,7 +486,7 @@ export default function ClientFormModal({ isOpen, onClose, onSave, clientToEdit,
                     ) : (
                       <Square size={16} className="text-slate-350 shrink-0" />
                     )}
-                    <span className="text-xs font-semibold select-none">{sector.label}</span>
+                    <span className="text-xs font-semibold select-none">{dept.name}</span>
                   </button>
                 );
               })}
@@ -539,7 +541,7 @@ export default function ClientFormModal({ isOpen, onClose, onSave, clientToEdit,
                 'writer',
                 'Selecione o Redator/Gerente de Conteúdo',
                 ['team_content_seo', 'team_social_media'],
-                !selectedSectors.includes('content_seo')
+                !(selectedSectors.includes('content_seo') || selectedSectors.includes('automations_crm'))
               )}
             </div>
           </div>
