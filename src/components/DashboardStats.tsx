@@ -120,9 +120,8 @@ export default function DashboardStats({ clients, departments, onSelectClient }:
     <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 mb-8">
       {/* Seção de Cards KPI */}
       <div className="lg:col-span-3 grid grid-cols-1 md:grid-cols-3 gap-5">
-        
-        {/* Card: Clientes Cadastrados */}
-        <div id="stat-card-clients" className="bg-white rounded-xl border border-slate-100 p-5 shadow-xs flex flex-col justify-between hover:border-indigo-100 transition-all">
+           {/* Card: Clientes Cadastrados */}
+        <div id="stat-card-clients" className="h-full bg-white rounded-xl border border-slate-100 p-5 shadow-xs flex flex-col justify-between hover:border-indigo-100 transition-all">
           <div className="flex items-center justify-between mb-4">
             <span className="font-sans text-xs font-semibold uppercase tracking-wider text-slate-400">Clientes Cadastrados</span>
             <div className="p-2 bg-indigo-50 rounded-lg text-indigo-600">
@@ -130,7 +129,7 @@ export default function DashboardStats({ clients, departments, onSelectClient }:
             </div>
           </div>
           <div>
-            <div className="font-display text-3.5xl font-bold text-slate-800 tracking-tight leading-none mb-22">
+            <div className="font-display text-3.5xl font-bold text-slate-800 tracking-tight leading-none mb-3">
               {totalClients}
             </div>
             <div className="flex flex-wrap items-center gap-x-2.5 gap-y-1 text-xs text-slate-500">
@@ -150,14 +149,14 @@ export default function DashboardStats({ clients, departments, onSelectClient }:
         </div>
 
         {/* Card: Gráfico de Satisfação */}
-        <div id="stat-card-satisfaction" className="bg-white rounded-xl border border-slate-100 p-5 shadow-xs flex flex-col justify-between hover:border-indigo-50 transition-all">
+        <div id="stat-card-satisfaction" className="h-full bg-white rounded-xl border border-slate-100 p-5 shadow-xs flex flex-col justify-between hover:border-indigo-50 transition-all">
           <div className="flex items-center justify-between mb-3 shrink-0">
             <span className="font-sans text-xs font-semibold uppercase tracking-wider text-slate-400">Satisfação dos Clientes</span>
             <div className="p-2 bg-indigo-50 rounded-lg text-indigo-600">
               <Smile size={18} />
             </div>
           </div>
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2.5">
             {/* Lado Esquerdo: SVG Donut Chart */}
             <div className="w-20 h-20 shrink-0 relative flex items-center justify-center">
               <svg viewBox="0 0 100 100" className="w-full h-full transform -rotate-90 text-center">
@@ -203,13 +202,13 @@ export default function DashboardStats({ clients, departments, onSelectClient }:
                 return (
                   <div 
                     key={item.level} 
-                    className={`flex items-center justify-between text-[10px] font-semibold tracking-tight transition-all truncate ${
+                    className={`flex items-center justify-between text-[10px] font-semibold tracking-tight transition-all ${
                       isActive ? 'text-slate-700' : 'text-slate-300 opacity-60'
                     }`}
                   >
-                    <div className="flex items-center gap-1.5 truncate">
+                    <div className="flex items-center gap-1.5">
                       <span className={`w-1.5 h-1.5 rounded-full ${item.colorBg}`} />
-                      <span className="truncate">{item.label}</span>
+                      <span>{item.label}</span>
                     </div>
                     <span className="font-mono font-bold shrink-0 ml-1">
                       {count} ({percent}%)
@@ -222,7 +221,7 @@ export default function DashboardStats({ clients, departments, onSelectClient }:
         </div>
 
         {/* Card: Categorias / Rankings */}
-        <div id="stat-card-rankings" className="bg-white rounded-xl border border-slate-100 p-5 shadow-xs flex flex-col justify-between hover:border-amber-100 transition-all">
+        <div id="stat-card-rankings" className="h-full bg-white rounded-xl border border-slate-100 p-5 shadow-xs flex flex-col justify-between hover:border-amber-100 transition-all">
           <div className="flex items-center justify-between mb-4">
             <span className="font-sans text-xs font-semibold uppercase tracking-wider text-slate-405">Carteira de Clientes (Tier)</span>
             <div className="p-2 bg-amber-50 rounded-lg text-amber-600">

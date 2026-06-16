@@ -251,14 +251,14 @@ export default function ClientDirectoryTable({
 
             <button
               onClick={() => setShowColManager(!showColManager)}
-              className={`px-3 py-2 text-xs font-semibold rounded-lg flex items-center gap-1.5 cursor-pointer transition-all border ${
+              className={`p-2 rounded-lg flex items-center justify-center cursor-pointer transition-all border ${
                 showColManager
-                  ? 'bg-indigo-50 border-indigo-200 text-indigo-700 font-bold'
-                  : 'bg-white border-slate-200 hover:bg-slate-50 text-slate-700 font-medium'
+                  ? 'bg-indigo-50 border-indigo-200 text-indigo-700'
+                  : 'bg-white border-slate-200 hover:bg-slate-50 text-slate-700'
               }`}
+              title={`Gerenciar Colunas (${customColumns.length})`}
             >
-              <Columns size={13} />
-              Colunas ({customColumns.length})
+              <Columns size={14} />
             </button>
 
             <button

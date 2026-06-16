@@ -877,7 +877,7 @@ export default function App() {
             </button>
           </div>
 
-          <div className="text-[11px] text-zinc-500 flex items-center gap-1">
+          <div className="text-[11px] text-zinc-500 flex items-center gap-1" style={{ width: '180px' }}>
             <TrendingUp size={13} className="text-emerald-500 shrink-0" />
             <span>Sincronizado em tempo real com o Firestore do Firebase.</span>
           </div>

@@ -130,7 +130,7 @@ export default function BentoClientDashboard({
             <h3 className="font-display font-bold text-sm text-zinc-800">
               Painel Spotlight Interativo
             </h3>
-            <p className="text-xs text-zinc-500">Escolha qualquer cliente de sua carteira para carregar seu Bento Grid operacional automaticamente.</p>
+            <p className="text-xs text-zinc-500 w-[400px]">Escolha qualquer cliente de sua carteira para carregar seu Bento Grid operacional automaticamente.</p>
           </div>
         </div>
 
@@ -164,11 +164,10 @@ export default function BentoClientDashboard({
                 onDeleteClientClick(currentClient.id);
               }
             }}
-            className="px-3.5 py-1.5 text-xs font-bold text-rose-600 bg-white border border-rose-200 hover:bg-rose-50/50 rounded-lg transition-colors cursor-pointer flex items-center gap-1"
-            title="Excluir cliente"
+            className="p-2 text-rose-600 bg-white border border-rose-200 hover:bg-rose-50 rounded-lg transition-all cursor-pointer flex items-center justify-center shadow-3xs"
+            title="Excluir Registro"
           >
-            <Trash2 size={12} />
-            Excluir Registro
+            <Trash2 size={14} className="shrink-0" />
           </button>
         </div>
       </div>
@@ -282,132 +281,210 @@ export default function BentoClientDashboard({
           </div>
         </div>
 
-        {/* 2. Equipe Responsável (col-span-5) */}
-        <div className="md:col-span-5 bg-white rounded-2xl border border-zinc-200 p-6 flex flex-col justify-between shadow-xs hover:border-zinc-300 transition-all">
-          <div className="text-left">
-            <h3 className="text-[10px] font-extrabold text-zinc-400 uppercase tracking-widest mb-4 font-mono">
-              Equipe Operacional Atribuída ao Escopo
-            </h3>
-            
-            <div className="grid grid-cols-2 lg:grid-cols-3 gap-2.5">
-              <div 
-                onClick={() => currentClient.responsibles.serviceLiaison && currentClient.responsibles.serviceLiaison !== '—' && currentClient.responsibles.serviceLiaison !== 'Unassigned' && onViewCollaboratorByName?.(currentClient.responsibles.serviceLiaison)}
-                className={`p-3 bg-zinc-50 rounded-xl border border-zinc-100 transition-all ${
-                  currentClient.responsibles.serviceLiaison && currentClient.responsibles.serviceLiaison !== '—' && currentClient.responsibles.serviceLiaison !== 'Unassigned'
-                    ? 'cursor-pointer hover:bg-zinc-101 hover:border-zinc-300'
-                    : ''
-                }`}
-                title={currentClient.responsibles.serviceLiaison && currentClient.responsibles.serviceLiaison !== 'Unassigned' ? "Ver perfil do CS" : undefined}
-              >
-                <p className="text-[9px] text-zinc-400 font-bold uppercase tracking-wider">CS / Atendimento</p>
-                <p className={`text-xs font-bold mt-1 truncate ${
-                  currentClient.responsibles.serviceLiaison && currentClient.responsibles.serviceLiaison !== '—' && currentClient.responsibles.serviceLiaison !== 'Unassigned'
-                    ? 'text-indigo-600 hover:underline font-extrabold'
-                    : 'text-zinc-400'
-                }`}>
-                  {currentClient.responsibles.serviceLiaison || '—'}
-                </p>
-              </div>
+        {/* Coluna Central: Equipe + Links (col-span-5) */}
+        <div className="md:col-span-5 flex flex-col gap-5">
+          {/* 2. Equipe Responsável */}
+          <div className="bg-white rounded-2xl border border-zinc-200 p-6 flex flex-col justify-between shadow-xs hover:border-zinc-300 transition-all">
+            <div className="text-left">
+              <h3 className="text-[10px] font-extrabold text-zinc-400 uppercase tracking-widest mb-4 font-mono">
+                Equipe Operacional Atribuída ao Escopo
+              </h3>
+              
+              <div className="grid grid-cols-2 lg:grid-cols-3 gap-2.5">
+                <div 
+                  onClick={() => currentClient.responsibles.serviceLiaison && currentClient.responsibles.serviceLiaison !== '—' && currentClient.responsibles.serviceLiaison !== 'Unassigned' && onViewCollaboratorByName?.(currentClient.responsibles.serviceLiaison)}
+                  className={`p-3 bg-zinc-50 rounded-xl border border-zinc-100 transition-all ${
+                    currentClient.responsibles.serviceLiaison && currentClient.responsibles.serviceLiaison !== '—' && currentClient.responsibles.serviceLiaison !== 'Unassigned'
+                      ? 'cursor-pointer hover:bg-zinc-101 hover:border-zinc-300'
+                      : ''
+                  }`}
+                  title={currentClient.responsibles.serviceLiaison && currentClient.responsibles.serviceLiaison !== 'Unassigned' ? "Ver perfil do CS" : undefined}
+                >
+                  <p className="text-[9px] text-zinc-400 font-bold uppercase tracking-wider">CS / Atendimento</p>
+                  <p className={`text-xs font-bold mt-1 truncate ${
+                    currentClient.responsibles.serviceLiaison && currentClient.responsibles.serviceLiaison !== '—' && currentClient.responsibles.serviceLiaison !== 'Unassigned'
+                      ? 'text-indigo-600 hover:underline font-extrabold'
+                      : 'text-zinc-400'
+                  }`}>
+                    {currentClient.responsibles.serviceLiaison || '—'}
+                  </p>
+                </div>
 
-              <div 
-                onClick={() => currentClient.responsibles.writer && currentClient.responsibles.writer !== '—' && currentClient.responsibles.writer !== 'Unassigned' && onViewCollaboratorByName?.(currentClient.responsibles.writer)}
-                className={`p-3 bg-zinc-50 rounded-xl border border-zinc-100 transition-all ${
-                  currentClient.responsibles.writer && currentClient.responsibles.writer !== '—' && currentClient.responsibles.writer !== 'Unassigned'
-                    ? 'cursor-pointer hover:bg-zinc-101 hover:border-zinc-300'
-                    : ''
-                }`}
-                title={currentClient.responsibles.writer && currentClient.responsibles.writer !== '—' ? "Ver perfil do Copywriter" : undefined}
-              >
-                <p className="text-[9px] text-zinc-400 font-bold uppercase tracking-wider">Redator / Copy</p>
-                <p className={`text-xs font-bold mt-1 truncate ${
-                  currentClient.responsibles.writer && currentClient.responsibles.writer !== '—' && currentClient.responsibles.writer !== 'Unassigned'
-                    ? 'text-indigo-600 hover:underline font-extrabold'
-                    : 'text-zinc-400'
-                }`}>
-                  {currentClient.responsibles.writer || '—'}
-                </p>
-              </div>
+                <div 
+                  onClick={() => currentClient.responsibles.writer && currentClient.responsibles.writer !== '—' && currentClient.responsibles.writer !== 'Unassigned' && onViewCollaboratorByName?.(currentClient.responsibles.writer)}
+                  className={`p-3 bg-zinc-50 rounded-xl border border-zinc-100 transition-all ${
+                    currentClient.responsibles.writer && currentClient.responsibles.writer !== '—' && currentClient.responsibles.writer !== 'Unassigned'
+                      ? 'cursor-pointer hover:bg-zinc-101 hover:border-zinc-300'
+                      : ''
+                  }`}
+                  title={currentClient.responsibles.writer && currentClient.responsibles.writer !== '—' ? "Ver perfil do Copywriter" : undefined}
+                >
+                  <p className="text-[9px] text-zinc-400 font-bold uppercase tracking-wider">Redator / Copy</p>
+                  <p className={`text-xs font-bold mt-1 truncate ${
+                    currentClient.responsibles.writer && currentClient.responsibles.writer !== '—' && currentClient.responsibles.writer !== 'Unassigned'
+                      ? 'text-indigo-600 hover:underline font-extrabold'
+                      : 'text-zinc-400'
+                  }`}>
+                    {currentClient.responsibles.writer || '—'}
+                  </p>
+                </div>
 
-              <div 
-                onClick={() => currentClient.responsibles.designer && currentClient.responsibles.designer !== '—' && currentClient.responsibles.designer !== 'Unassigned' && onViewCollaboratorByName?.(currentClient.responsibles.designer)}
-                className={`p-3 bg-zinc-50 rounded-xl border border-zinc-100 transition-all ${
-                  currentClient.responsibles.designer && currentClient.responsibles.designer !== '—' && currentClient.responsibles.designer !== 'Unassigned'
-                    ? 'cursor-pointer hover:bg-zinc-101 hover:border-zinc-300'
-                    : ''
-                }`}
-                title={currentClient.responsibles.designer && currentClient.responsibles.designer !== '—' ? "Ver perfil do Designer" : undefined}
-              >
-                <p className="text-[9px] text-zinc-400 font-bold uppercase tracking-wider">Criação / Design</p>
-                <p className={`text-xs font-bold mt-1 truncate ${
-                  currentClient.responsibles.designer && currentClient.responsibles.designer !== '—' && currentClient.responsibles.designer !== 'Unassigned'
-                    ? 'text-indigo-600 hover:underline font-extrabold'
-                    : 'text-zinc-400'
-                }`}>
-                  {currentClient.responsibles.designer || '—'}
-                </p>
-              </div>
+                <div 
+                  onClick={() => currentClient.responsibles.designer && currentClient.responsibles.designer !== '—' && currentClient.responsibles.designer !== 'Unassigned' && onViewCollaboratorByName?.(currentClient.responsibles.designer)}
+                  className={`p-3 bg-zinc-50 rounded-xl border border-zinc-100 transition-all ${
+                    currentClient.responsibles.designer && currentClient.responsibles.designer !== '—' && currentClient.responsibles.designer !== 'Unassigned'
+                      ? 'cursor-pointer hover:bg-zinc-101 hover:border-zinc-300'
+                      : ''
+                  }`}
+                  title={currentClient.responsibles.designer && currentClient.responsibles.designer !== '—' ? "Ver perfil do Designer" : undefined}
+                >
+                  <p className="text-[9px] text-zinc-400 font-bold uppercase tracking-wider">Criação / Design</p>
+                  <p className={`text-xs font-bold mt-1 truncate ${
+                    currentClient.responsibles.designer && currentClient.responsibles.designer !== '—' && currentClient.responsibles.designer !== 'Unassigned'
+                      ? 'text-indigo-600 hover:underline font-extrabold'
+                      : 'text-zinc-400'
+                  }`}>
+                    {currentClient.responsibles.designer || '—'}
+                  </p>
+                </div>
 
-              <div 
-                onClick={() => currentClient.responsibles.paidTrafficHandler && currentClient.responsibles.paidTrafficHandler !== '—' && currentClient.responsibles.paidTrafficHandler !== 'Unassigned' && onViewCollaboratorByName?.(currentClient.responsibles.paidTrafficHandler)}
-                className={`p-3 bg-zinc-50 rounded-xl border border-zinc-100 transition-all ${
-                  currentClient.responsibles.paidTrafficHandler && currentClient.responsibles.paidTrafficHandler !== '—' && currentClient.responsibles.paidTrafficHandler !== 'Unassigned'
-                    ? 'cursor-pointer hover:bg-zinc-101 hover:border-zinc-300'
-                    : ''
-                }`}
-                title={currentClient.responsibles.paidTrafficHandler && currentClient.responsibles.paidTrafficHandler !== '—' ? "Ver perfil do Gestor de Tráfego" : undefined}
-              >
-                <p className="text-[9px] text-zinc-400 font-bold uppercase tracking-wider">Mídia / Tráfego</p>
-                <p className={`text-xs font-bold mt-1 truncate ${
-                  currentClient.responsibles.paidTrafficHandler && currentClient.responsibles.paidTrafficHandler !== '—' && currentClient.responsibles.paidTrafficHandler !== 'Unassigned'
-                    ? 'text-indigo-600 hover:underline font-extrabold'
-                    : 'text-zinc-400'
-                }`}>
-                  {currentClient.responsibles.paidTrafficHandler || '—'}
-                </p>
-              </div>
+                <div 
+                  onClick={() => currentClient.responsibles.paidTrafficHandler && currentClient.responsibles.paidTrafficHandler !== '—' && currentClient.responsibles.paidTrafficHandler !== 'Unassigned' && onViewCollaboratorByName?.(currentClient.responsibles.paidTrafficHandler)}
+                  className={`p-3 bg-zinc-50 rounded-xl border border-zinc-100 transition-all ${
+                    currentClient.responsibles.paidTrafficHandler && currentClient.responsibles.paidTrafficHandler !== '—' && currentClient.responsibles.paidTrafficHandler !== 'Unassigned'
+                      ? 'cursor-pointer hover:bg-zinc-101 hover:border-zinc-300'
+                      : ''
+                  }`}
+                  title={currentClient.responsibles.paidTrafficHandler && currentClient.responsibles.paidTrafficHandler !== '—' ? "Ver perfil do Gestor de Tráfego" : undefined}
+                >
+                  <p className="text-[9px] text-zinc-400 font-bold uppercase tracking-wider">Mídia / Tráfego</p>
+                  <p className={`text-xs font-bold mt-1 truncate ${
+                    currentClient.responsibles.paidTrafficHandler && currentClient.responsibles.paidTrafficHandler !== '—' && currentClient.responsibles.paidTrafficHandler !== 'Unassigned'
+                      ? 'text-indigo-600 hover:underline font-extrabold'
+                      : 'text-zinc-400'
+                  }`}>
+                    {currentClient.responsibles.paidTrafficHandler || '—'}
+                  </p>
+                </div>
 
-              <div 
-                onClick={() => currentClient.responsibles.socialMedia && currentClient.responsibles.socialMedia !== '—' && currentClient.responsibles.socialMedia !== 'Unassigned' && onViewCollaboratorByName?.(currentClient.responsibles.socialMedia)}
-                className={`p-3 bg-zinc-50 rounded-xl border border-zinc-100 col-span-2 lg:col-span-1 transition-all ${
-                  currentClient.responsibles.socialMedia && currentClient.responsibles.socialMedia !== '—' && currentClient.responsibles.socialMedia !== 'Unassigned'
-                    ? 'cursor-pointer hover:bg-zinc-101 hover:border-zinc-300'
-                    : ''
-                }`}
-                title={currentClient.responsibles.socialMedia && currentClient.responsibles.socialMedia !== '—' ? "Ver perfil de Social Media" : undefined}
-              >
-                <p className="text-[9px] text-zinc-400 font-bold uppercase tracking-wider">Social Media</p>
-                <p className={`text-xs font-bold mt-1 truncate ${
-                  currentClient.responsibles.socialMedia && currentClient.responsibles.socialMedia !== '—' && currentClient.responsibles.socialMedia !== 'Unassigned'
-                    ? 'text-indigo-600 hover:underline font-extrabold'
-                    : 'text-zinc-400'
-                }`}>
-                  {currentClient.responsibles.socialMedia || '—'}
-                </p>
+                <div 
+                  onClick={() => currentClient.responsibles.socialMedia && currentClient.responsibles.socialMedia !== '—' && currentClient.responsibles.socialMedia !== 'Unassigned' && onViewCollaboratorByName?.(currentClient.responsibles.socialMedia)}
+                  className={`p-3 bg-zinc-50 rounded-xl border border-zinc-100 col-span-2 lg:col-span-1 transition-all ${
+                    currentClient.responsibles.socialMedia && currentClient.responsibles.socialMedia !== '—' && currentClient.responsibles.socialMedia !== 'Unassigned'
+                      ? 'cursor-pointer hover:bg-zinc-101 hover:border-zinc-300'
+                      : ''
+                  }`}
+                  title={currentClient.responsibles.socialMedia && currentClient.responsibles.socialMedia !== '—' ? "Ver perfil de Social Media" : undefined}
+                >
+                  <p className="text-[9px] text-zinc-400 font-bold uppercase tracking-wider">Social Media</p>
+                  <p className={`text-xs font-bold mt-1 truncate ${
+                    currentClient.responsibles.socialMedia && currentClient.responsibles.socialMedia !== '—' && currentClient.responsibles.socialMedia !== 'Unassigned'
+                      ? 'text-indigo-600 hover:underline font-extrabold'
+                      : 'text-zinc-400'
+                  }`}>
+                    {currentClient.responsibles.socialMedia || '—'}
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div className="mt-6 pt-4 border-t border-zinc-100 text-left">
+              <div className="flex justify-between items-center mb-1.5 flex-wrap gap-2">
+                <p className="text-[9px] text-zinc-400 font-bold uppercase tracking-widest font-mono">Volume de Escopo Contratado</p>
+                <div className="flex items-center gap-2">
+                  <span className="text-xs font-bold text-zinc-800">{clientAssignedCount} {clientAssignedCount === 1 ? 'tarefa ativa' : 'tarefas ativas'}</span>
+                  <span className={`text-[9.5px] font-bold px-2 py-0.5 rounded-full border ${volume.color}`}>
+                    {volume.label}
+                  </span>
+                </div>
+              </div>
+              <div className="w-full h-2.5 bg-zinc-100 rounded-full overflow-hidden">
+                <div 
+                  className={`h-full transition-all duration-500 rounded-full ${volume.barColor}`} 
+                  style={{ width: `${volume.width}%` }}
+                />
               </div>
             </div>
           </div>
 
-          <div className="mt-6 pt-4 border-t border-zinc-100 text-left">
-            <div className="flex justify-between items-center mb-1.5 flex-wrap gap-2">
-              <p className="text-[9px] text-zinc-400 font-bold uppercase tracking-widest font-mono">Volume de Escopo Contratado</p>
-              <div className="flex items-center gap-2">
-                <span className="text-xs font-bold text-zinc-800">{clientAssignedCount} {clientAssignedCount === 1 ? 'tarefa ativa' : 'tarefas ativas'}</span>
-                <span className={`text-[9.5px] font-bold px-2 py-0.5 rounded-full border ${volume.color}`}>
-                  {volume.label}
-                </span>
-              </div>
-            </div>
-            <div className="w-full h-2.5 bg-zinc-100 rounded-full overflow-hidden">
+          {/* 5. Repositórios e Planejamentos (links/repos) */}
+          <div className="grid grid-cols-3 gap-3">
+            {currentClient.driveFolderLink ? (
+              <a 
+                href={currentClient.driveFolderLink} 
+                target="_blank" 
+                referrerPolicy="no-referrer"
+                rel="noopener noreferrer"
+                className="bg-white border border-emerald-200 hover:border-emerald-300 rounded-2xl p-4 flex flex-col justify-center items-center hover:bg-emerald-50/20 transition-all shadow-xs group cursor-pointer text-center h-full min-h-[95px] hover:scale-102"
+                title="Pasta Google Drive: Arquivos & Criativos"
+              >
+                <div className="w-12 h-12 bg-emerald-50 rounded-xl flex items-center justify-center group-hover:scale-105 transition-transform shadow-3xs">
+                  <GoogleDriveIcon active={true} />
+                </div>
+              </a>
+            ) : (
               <div 
-                className={`h-full transition-all duration-500 rounded-full ${volume.barColor}`} 
-                style={{ width: `${volume.width}%` }}
-              />
-            </div>
+                className="bg-zinc-50/50 border border-dashed border-zinc-200 rounded-2xl p-4 flex flex-col justify-center items-center text-center cursor-not-allowed text-zinc-400 h-full min-h-[95px]"
+                title="Sem Google Drive"
+              >
+                <div className="w-10 h-10 bg-zinc-100 rounded-xl flex items-center justify-center opacity-65">
+                  <GoogleDriveIcon active={false} />
+                </div>
+              </div>
+            )}
+
+            {currentClient.annualPlanningLink ? (
+              <a 
+                href={currentClient.annualPlanningLink} 
+                target="_blank" 
+                referrerPolicy="no-referrer"
+                rel="noopener noreferrer"
+                className="bg-white border border-amber-200 hover:border-amber-300 rounded-2xl p-4 flex flex-col justify-center items-center hover:bg-amber-50/20 transition-all shadow-xs group cursor-pointer text-center h-full min-h-[95px] hover:scale-102"
+                title="Planejamento Estratégico: Apresentação Geral"
+              >
+                <div className="w-12 h-12 bg-amber-50 rounded-xl flex items-center justify-center group-hover:scale-105 transition-transform shadow-3xs">
+                  <GoogleSlidesIcon active={true} />
+                </div>
+              </a>
+            ) : (
+              <div 
+                className="bg-zinc-50/50 border border-dashed border-zinc-200 rounded-2xl p-4 flex flex-col justify-center items-center text-center cursor-not-allowed text-zinc-400 h-full min-h-[95px]"
+                title="Sem Planejamento"
+              >
+                <div className="w-10 h-10 bg-zinc-100 rounded-xl flex items-center justify-center opacity-65">
+                  <GoogleSlidesIcon active={false} />
+                </div>
+              </div>
+            )}
+
+            {currentClient.operandLink ? (
+              <a 
+                href={currentClient.operandLink} 
+                target="_blank" 
+                referrerPolicy="no-referrer"
+                rel="noopener noreferrer"
+                className="bg-white border border-blue-200 hover:border-blue-300 rounded-2xl p-4 flex flex-col justify-center items-center hover:bg-blue-50/20 transition-all shadow-xs group cursor-pointer text-center h-full min-h-[95px] hover:scale-102"
+                title="Operand Operacional: Pautas & Agenda"
+              >
+                <div className="w-12 h-12 bg-blue-50 rounded-xl flex items-center justify-center group-hover:scale-105 transition-transform shadow-3xs">
+                  <OperandIcon active={true} />
+                </div>
+              </a>
+            ) : (
+              <div 
+                className="bg-zinc-50/50 border border-dashed border-zinc-200 rounded-2xl p-4 flex flex-col justify-center items-center text-center cursor-not-allowed text-zinc-400 h-full min-h-[95px]"
+                title="Sem Operand"
+              >
+                <div className="w-10 h-10 bg-zinc-100 rounded-xl flex items-center justify-center opacity-65">
+                  <OperandIcon active={false} />
+                </div>
+              </div>
+            )}
           </div>
         </div>
 
-        {/* 3. Objetivos e Dores (col-span-3) */}
-        <div className="md:col-span-3 bg-zinc-900 rounded-2xl p-6 text-white shadow-md flex flex-col justify-between group relative overflow-hidden">
+        {/* 3. Objetivos e Dores (col-span-3 - topo lateral) */}
+        <div className="md:col-span-3 bg-zinc-900 rounded-2xl p-6 text-white shadow-md flex flex-col justify-between group relative overflow-hidden h-full min-h-[350px]">
           <div className="absolute bottom-0 right-0 w-32 h-32 bg-white/5 rounded-full -mb-16 -mr-16 pointer-events-none" />
           
           <div className="space-y-4 text-left">
@@ -416,7 +493,7 @@ export default function BentoClientDashboard({
               Dores & Objetivos do Cliente
             </h3>
             
-            <div className="max-h-[160px] overflow-y-auto custom-scrollbar-slate pr-1 space-y-3 pb-2 text-xs">
+            <div className="max-h-[250px] overflow-y-auto custom-scrollbar-slate pr-1 space-y-3 pb-2 text-xs">
               {currentClient.communicationObjectives ? (
                 currentClient.communicationObjectives.split('\n').filter(Boolean).map((obj, i) => (
                   <div key={i} className="flex gap-2.5">
@@ -432,14 +509,14 @@ export default function BentoClientDashboard({
             </div>
           </div>
 
-          <div className="mt-4 pt-3 border-t border-zinc-800 flex items-center justify-between text-[10px] text-zinc-400 font-mono shrink-0">
+          <div className="mt-6 pt-3 border-t border-zinc-800 flex items-center justify-between text-[10px] text-zinc-400 font-mono shrink-0">
             <span>byb.ag Planejamento</span>
             <span>Est. 2026</span>
           </div>
         </div>
 
-        {/* 4. Escopos de entregas e tarefas (col-span-9) */}
-        <div className="md:col-span-9 bg-white rounded-2xl border border-zinc-200 p-6 flex flex-col justify-between shadow-xs hover:border-zinc-300 transition-all">
+        {/* 4. Escopos de entregas e tarefas (col-span-12) */}
+        <div className="md:col-span-12 bg-white rounded-2xl border border-zinc-200 p-6 flex flex-col justify-between shadow-xs hover:border-zinc-300 transition-all">
           <div className="flex justify-between items-center mb-4 pb-2 border-b border-zinc-100 flex-wrap gap-2 text-left">
             <h3 className="text-[10px] font-extrabold text-zinc-400 uppercase tracking-widest flex items-center gap-1.5 font-mono">
               <Layers size={13} className="text-zinc-500" />
@@ -514,83 +591,6 @@ export default function BentoClientDashboard({
               </div>
             );
           })()}
-        </div>
-
-        {/* 5. Repositórios e Planejamentos (col-span-3) */}
-        <div className="md:col-span-3 grid grid-cols-3 gap-3 h-full">
-          
-          {currentClient.driveFolderLink ? (
-            <a 
-              href={currentClient.driveFolderLink} 
-              target="_blank" 
-              referrerPolicy="no-referrer"
-              rel="noopener noreferrer"
-              className="bg-white border border-emerald-200 hover:border-emerald-300 rounded-2xl p-4 flex flex-col justify-center items-center hover:bg-emerald-50/20 transition-all shadow-xs group cursor-pointer text-center h-full min-h-[95px] hover:scale-102"
-              title="Pasta Google Drive: Arquivos & Criativos"
-            >
-              <div className="w-12 h-12 bg-emerald-50 rounded-xl flex items-center justify-center group-hover:scale-105 transition-transform shadow-3xs">
-                <GoogleDriveIcon active={true} />
-              </div>
-            </a>
-          ) : (
-            <div 
-              className="bg-zinc-50/50 border border-dashed border-zinc-200 rounded-2xl p-4 flex flex-col justify-center items-center text-center cursor-not-allowed text-zinc-400 h-full min-h-[95px]"
-              title="Sem Google Drive"
-            >
-              <div className="w-10 h-10 bg-zinc-100 rounded-xl flex items-center justify-center opacity-65">
-                <GoogleDriveIcon active={false} />
-              </div>
-            </div>
-          )}
-
-          {currentClient.annualPlanningLink ? (
-            <a 
-              href={currentClient.annualPlanningLink} 
-              target="_blank" 
-              referrerPolicy="no-referrer"
-              rel="noopener noreferrer"
-              className="bg-white border border-amber-200 hover:border-amber-300 rounded-2xl p-4 flex flex-col justify-center items-center hover:bg-amber-50/20 transition-all shadow-xs group cursor-pointer text-center h-full min-h-[95px] hover:scale-102"
-              title="Planejamento Estratégico: Apresentação Geral"
-            >
-              <div className="w-12 h-12 bg-amber-50 rounded-xl flex items-center justify-center group-hover:scale-105 transition-transform shadow-3xs">
-                <GoogleSlidesIcon active={true} />
-              </div>
-            </a>
-          ) : (
-            <div 
-              className="bg-zinc-50/50 border border-dashed border-zinc-200 rounded-2xl p-4 flex flex-col justify-center items-center text-center cursor-not-allowed text-zinc-400 h-full min-h-[95px]"
-              title="Sem Planejamento"
-            >
-              <div className="w-10 h-10 bg-zinc-100 rounded-xl flex items-center justify-center opacity-65">
-                <GoogleSlidesIcon active={false} />
-              </div>
-            </div>
-          )}
-
-          {currentClient.operandLink ? (
-            <a 
-              href={currentClient.operandLink} 
-              target="_blank" 
-              referrerPolicy="no-referrer"
-              rel="noopener noreferrer"
-              className="bg-white border border-blue-200 hover:border-blue-300 rounded-2xl p-4 flex flex-col justify-center items-center hover:bg-blue-50/20 transition-all shadow-xs group cursor-pointer text-center h-full min-h-[95px] hover:scale-102"
-              title="Operand Operacional: Pautas & Agenda"
-            >
-              <div className="w-12 h-12 bg-blue-50 rounded-xl flex items-center justify-center group-hover:scale-105 transition-transform shadow-3xs">
-                <OperandIcon active={true} />
-              </div>
-            </a>
-          ) : (
-            <div 
-              className="bg-zinc-50/50 border border-dashed border-zinc-200 rounded-2xl p-4 flex flex-col justify-center items-center text-center cursor-not-allowed text-zinc-400 h-full min-h-[95px]"
-              title="Sem Operand"
-            >
-              <div className="w-10 h-10 bg-zinc-100 rounded-xl flex items-center justify-center opacity-65">
-                <OperandIcon active={false} />
-              </div>
-            </div>
-          )}
-
         </div>
 
       </div>
