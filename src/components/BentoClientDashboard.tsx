@@ -393,9 +393,6 @@ export default function BentoClientDashboard({
                 <p className="text-[9px] text-zinc-400 font-bold uppercase tracking-widest font-mono">Volume de Escopo Contratado</p>
                 <div className="flex items-center gap-2">
                   <span className="text-xs font-bold text-zinc-800">{clientAssignedCount} {clientAssignedCount === 1 ? 'tarefa ativa' : 'tarefas ativas'}</span>
-                  <span className={`text-[9.5px] font-bold px-2 py-0.5 rounded-full border ${volume.color}`}>
-                    {volume.label}
-                  </span>
                 </div>
               </div>
               <div className="w-full h-2.5 bg-zinc-100 rounded-full overflow-hidden">
