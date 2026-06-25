@@ -14,6 +14,7 @@ import ClientFormModal from './components/ClientFormModal';
 import BentoClientDashboard from './components/BentoClientDashboard';
 import TeamManager from './components/TeamManager';
 import CollaboratorProfileModal from './components/CollaboratorProfileModal';
+import DepartmentScopeModal from './components/DepartmentScopeModal';
 import { 
   db, 
   auth, 
@@ -61,6 +62,10 @@ export default function App() {
   const [selectedCollaborator, setSelectedCollaborator] = useState<TeamMember | null>(null);
   const [isCollaboratorModalOpen, setIsCollaboratorModalOpen] = useState(false);
   const [collaboratorToEdit, setCollaboratorToEdit] = useState<TeamMember | null>(null);
+
+  // Department Scope modal states
+  const [selectedDepartmentForScope, setSelectedDepartmentForScope] = useState<Department | null>(null);
+  const [isDepartmentScopeModalOpen, setIsDepartmentScopeModalOpen] = useState(false);
 
   // User Auth and Load state
   const [user, setUser] = useState<any>(null);
@@ -254,6 +259,7 @@ export default function App() {
           annualPlanningLink: clientData.annualPlanningLink,
           operandLink: clientData.operandLink || '',
           scope: clientData.scope || existingClient?.scope || {},
+          scopeDetails: clientData.scopeDetails || existingClient?.scopeDetails || {},
           notes: clientData.notes,
           satisfactionRating: clientData.satisfactionRating,
           customFields: clientData.customFields || {},
@@ -275,6 +281,7 @@ export default function App() {
           annualPlanningLink: clientData.annualPlanningLink,
           operandLink: clientData.operandLink || '',
           scope: clientData.scope || {},
+          scopeDetails: clientData.scopeDetails || {},
           notes: clientData.notes,
           createdAt: new Date().toISOString(),
           satisfactionRating: clientData.satisfactionRating || 5,
@@ -896,6 +903,10 @@ export default function App() {
               onDeleteClientClick={handleDeleteClient}
               onUpdateSatisfaction={handleUpdateSatisfaction}
               onViewCollaboratorByName={handleViewCollaboratorByName}
+              onOpenDepartmentScope={(dept) => {
+                setSelectedDepartmentForScope(dept);
+                setIsDepartmentScopeModalOpen(true);
+              }}
             />
           )}
 
@@ -972,6 +983,15 @@ export default function App() {
         teams={teams}
         clients={clients}
         onEditMemberClick={handleEditCollaboratorFromModal}
+      />
+
+      {/* Department Scope Modal */}
+      <DepartmentScopeModal
+        isOpen={isDepartmentScopeModalOpen}
+        onClose={() => setIsDepartmentScopeModalOpen(false)}
+        client={clients.find(c => c.id === selectedClientId) || null}
+        department={selectedDepartmentForScope}
+        onSave={handleSaveClient}
       />
 
       {/* Footer */}

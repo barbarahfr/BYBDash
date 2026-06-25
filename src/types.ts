@@ -29,6 +29,7 @@ export interface Client {
   annualPlanningLink: string;
   operandLink?: string;
   scope: { [departmentId: string]: string[] }; // Map of departmentId -> Array of active taskIds
+  scopeDetails?: { [departmentId: string]: Record<string, any> }; // Detailed scope specs per department
   createdAt: string;
   notes: string;
   satisfactionRating?: number; // 1 to 5 scale

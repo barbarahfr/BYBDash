@@ -59,6 +59,7 @@ interface BentoClientDashboardProps {
   onDeleteClientClick: (id: string) => void;
   onUpdateSatisfaction?: (id: string, rating: number) => void;
   onViewCollaboratorByName?: (name: string) => void;
+  onOpenDepartmentScope?: (department: Department) => void;
 }
 
 export default function BentoClientDashboard({
@@ -70,7 +71,8 @@ export default function BentoClientDashboard({
   onConfigureScopeClick,
   onDeleteClientClick,
   onUpdateSatisfaction,
-  onViewCollaboratorByName
+  onViewCollaboratorByName,
+  onOpenDepartmentScope
 }: BentoClientDashboardProps) {
   
   // Encontra o cliente atualmente selecionado
@@ -533,53 +535,58 @@ export default function BentoClientDashboard({
               return assignedTaskIds.length > 0;
             });
 
-            if (activeDepartments.length === 0) {
-              return (
-                <div className="text-center py-8 bg-zinc-50 rounded-xl border border-dashed border-zinc-200 text-left">
-                  <p className="text-xs text-zinc-500 font-semibold">Nenhuma área contratada/ativa no escopo recorrente desta empresa.</p>
-                  <button 
-                    onClick={onConfigureScopeClick}
-                    className="text-[11px] font-extrabold text-indigo-650 hover:text-indigo-800 mt-2 transition-all cursor-pointer underline hover:scale-101"
-                  >
-                    Vincular escopo contratado agora
-                  </button>
-                </div>
-              );
-            }
+            const displayDepartments = activeDepartments.length > 0 ? activeDepartments : departments;
 
             return (
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-left">
-                {activeDepartments.map(dept => {
+                {displayDepartments.map(dept => {
                   const assignedTaskIds = currentClient.scope[dept.id] || [];
                   const activeTasks = dept.tasks.filter(task => assignedTaskIds.includes(task.id));
 
                   return (
-                    <div key={dept.id} className="bg-zinc-50/70 rounded-xl p-4 border border-zinc-100 flex flex-col justify-between min-h-[140px]">
+                    <div key={dept.id} className="bg-zinc-50/70 rounded-xl p-4 border border-zinc-100 flex flex-col justify-between min-h-[140px] hover:shadow-xs transition-all">
                       <div>
-                        <p className="text-xs font-bold text-zinc-800 mb-3 flex items-center gap-2">
-                          <span className={`w-2 h-4 rounded-sm ${
-                            dept.color === 'emerald' ? 'bg-emerald-500' :
-                            dept.color === 'purple' ? 'bg-purple-500' :
-                            dept.color === 'blue' ? 'bg-blue-500' :
-                            dept.color === 'amber' ? 'bg-amber-500' : 'bg-rose-500'
-                          }`} /> 
-                          {dept.name}
-                        </p>
+                        <div className="flex items-center justify-between mb-3">
+                          <p className="text-xs font-bold text-zinc-800 flex items-center gap-2">
+                            <span className={`w-2 h-4 rounded-sm ${
+                              dept.color === 'emerald' ? 'bg-emerald-500' :
+                              dept.color === 'purple' ? 'bg-purple-500' :
+                              dept.color === 'blue' ? 'bg-blue-500' :
+                              dept.color === 'amber' ? 'bg-amber-500' : 'bg-rose-500'
+                            }`} /> 
+                            {dept.name}
+                          </p>
+                          {onOpenDepartmentScope && (
+                            <button
+                              onClick={() => onOpenDepartmentScope(dept)}
+                              className="text-[10px] font-bold text-indigo-600 hover:text-indigo-800 bg-indigo-50 hover:bg-indigo-100 px-2.5 py-1 rounded-lg transition-colors cursor-pointer flex items-center gap-1 select-none shadow-2xs"
+                              title={`Ver e editar detalhes do escopo de ${dept.name}`}
+                            >
+                              + Ver mais
+                            </button>
+                          )}
+                        </div>
                         
                         <div className="space-y-1.5 max-h-[150px] overflow-y-auto custom-scrollbar pr-0.5">
-                          {activeTasks.map(task => (
-                            <div 
-                              key={task.id} 
-                              className="text-[11px] bg-white p-1.5 border border-zinc-200 rounded-md flex justify-between items-center transition-all hover:bg-zinc-50/50"
-                            >
-                              <span className="font-semibold text-zinc-700 truncate max-w-[130px] pr-2" title={task.name}>
-                                {task.name}
-                              </span>
-                              <span className="text-[9px] font-extrabold text-emerald-600 uppercase bg-emerald-50 px-1 py-0.5 rounded shrink-0">
-                                Escopo
-                              </span>
+                          {activeTasks.length > 0 ? (
+                            activeTasks.map(task => (
+                              <div 
+                                key={task.id} 
+                                className="text-[11px] bg-white p-1.5 border border-zinc-200 rounded-md flex justify-between items-center transition-all hover:bg-zinc-50/50"
+                              >
+                                <span className="font-semibold text-zinc-700 truncate max-w-[130px] pr-2" title={task.name}>
+                                  {task.name}
+                                </span>
+                                <span className="text-[9px] font-extrabold text-emerald-600 uppercase bg-emerald-50 px-1 py-0.5 rounded shrink-0">
+                                  Escopo
+                                </span>
+                              </div>
+                            ))
+                          ) : (
+                            <div className="text-[11px] text-zinc-400 italic py-2 text-center bg-white/50 rounded-lg border border-dashed border-zinc-200">
+                              Nenhuma entrega vinculada
                             </div>
-                          ))}
+                          )}
                         </div>
                       </div>
                     </div>
