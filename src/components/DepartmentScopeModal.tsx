@@ -12,7 +12,6 @@ interface DepartmentScopeModalProps {
 
 const PAID_MEDIA_FIELDS = [
   // Equipe & Relacionamento
-  { key: 'clientes', label: 'Clientes', category: 'Equipe & Relacionamento' },
   { key: 'relacionamento', label: 'Relacionamento', category: 'Equipe & Relacionamento' },
   { key: 'atendimento', label: 'Atendimento', category: 'Equipe & Relacionamento' },
   { key: 'responsavelMidias', label: 'Responsável Mídias', category: 'Equipe & Relacionamento' },
